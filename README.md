@@ -3,7 +3,7 @@
 Este es un sistema de gestión integral para gimnasios, actualmente en desarrollo, desarrollado con Java, Spring Boot, JPA, PostgreSQL, HTML5, CSS3, JavaScript. El objetivo es ofrecer una solución completa para el manejo de membresías, ventas, asistencias, productos y clases, todo desde una interfaz web intuitiva.
 ```
 
-## 🚧 Estado del proyecto
+## Estado del proyecto
 
 **En desarrollo activo**  
 En proceso de terminar las funcionalidades básicas CRUD para cada entitdad.  
@@ -11,7 +11,7 @@ Próximamente: autenticación, reportes, notificaciones y mejoras visuales.
 
 ---
 
-## ⚙️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - **Java 17**
 - **Spring Boot**
@@ -22,7 +22,7 @@ Próximamente: autenticación, reportes, notificaciones y mejoras visuales.
 
 ---
 
-## 📌 Funcionalidades principales (actuales y planeadas)
+## Funcionalidades principales (actuales y planeadas)
 
 | Módulo | Estado | Descripción |
 |--------|--------|-------------|
@@ -37,7 +37,7 @@ Próximamente: autenticación, reportes, notificaciones y mejoras visuales.
 
 ---
 
-## 🚀 Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
 1. **Clona el repositorio:**
 ```bash

@@ -28,7 +28,7 @@ public class AsistenciaGeneralControlador {
     }
 
 	/*--------------------------------------------------------------
-	 * 1. Registrar asistencia general
+	 * 1. Registrar asistencia general (api/asistencia-general/registrar)
 	 *-------------------------------------------------------------*/
 
 	/**

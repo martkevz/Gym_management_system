@@ -57,7 +57,14 @@ public class AsistenciaGeneralServicio {
 
         HorarioPorDia horario = horarioRepositorio.findById(dto.getIdHorario())
                                                     .orElseThrow(() -> new RecursoNoEncontradoExcepcion ("Horario no encontrado con ID: " + dto.getIdHorario()));
-        
+        /*  
+         * Validar que el usuario tenga una membresía activa.
+         * Si la fecha de fin de la membresía es nula o anterior a la fecha actual, se lanza una excepción.
+         */
+        if (usuario.getFechaFinMembresia() == null || usuario.getFechaFinMembresia().toLocalDate().isBefore(LocalDate.now())){
+            throw new IllegalStateException("El usuario no tiene una membresía activa");
+        }
+
         // Si la fecha no se proporciona, usar la fecha actual:
         LocalDate fecha = dto.getFecha() != null ? dto.getFecha() : LocalDate.now(); 
 
