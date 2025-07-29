@@ -3,6 +3,7 @@ package com.app.gym.servicios;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,12 @@ import com.app.gym.dtos.AsistenciaGeneralResponseDTO;
 import com.app.gym.dtos.AsistenciaRequestDTO;
 import com.app.gym.dtos.HorarioPorDiaSimpleDTO;
 import com.app.gym.dtos.UsuarioSimpleDTO;
+import com.app.gym.dtos.VentaResponseDTO;
 import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
 import com.app.gym.modelos.AsistenciaGeneral;
 import com.app.gym.modelos.HorarioPorDia;
 import com.app.gym.modelos.Usuario;
+import com.app.gym.modelos.Venta;
 import com.app.gym.repositorios.AsistenciaGeneralRepositorio;
 import com.app.gym.repositorios.HorarioPorDiaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
@@ -108,7 +111,7 @@ public class AsistenciaGeneralServicio {
         return asistenciaGuardada;
     }
 
-    // ------------------------------------------------------------------
+    // ------------------------------------------------------------------ 
     public AsistenciaGeneralResponseDTO toResponseDTO (AsistenciaGeneral asistenciaGeneral){
 
         /*
@@ -136,5 +139,23 @@ public class AsistenciaGeneralServicio {
         return r; // Retorna el DTO de respuesta con los datos de la asistencia general
     }
 
+    /**
+     * Convierte una lista de entidades AsistenciaGeneral a una lista de DTOs de respuesta.
+     *
+     * Este método utiliza la API de Streams de Java para transformar una lista de
+     * objetos del tipo AsistenciaGeneral en una lista de objetos AsistenciaGeneralResponseDTO. Esta transformación
+     * es útil para exponer solo los datos necesarios al cliente, manteniendo así la capa de persistencia desacoplada de la capa de presentación.
+     *
+     * @param asistencias la lista de entidades AsistenciaGeneral a convertir
+     * @return la lista de DTOs de respuesta correspondientes
+     */
+    public List<AsistenciaGeneralResponseDTO> toResponseDTO(List<AsistenciaGeneral> asistencias){
+
+        // Inicia un Stream a partir de la lista de objetos AsistenciaGeneral.
+        // Un Stream permite operar sobre los elementos de forma funcional y más expresiva
+        return asistencias.stream() // Aplica una transformación (mapeo) a cada objeto AsistenciaGeneral en el Stream.
+                    .map(this::toResponseDTO) // Aplica una transformación (mapeo) a cada objeto AsistenciaGeneral en el Stream.
+                    .toList(); // Convierte el Stream resultante (de tipo Stream<AsistenciaGeneralResponseDTO>) a una lista de tipo List<AsistenciaGeneralResponseDTO>.
+    }
 
 }

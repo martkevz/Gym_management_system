@@ -235,12 +235,19 @@ public class VentaServicio {
     /**
      * Convierte una lista de entidades Venta a una lista de DTOs de respuesta.
      *
+     * Este método utiliza la API de Streams de Java para transformar una lista de
+     * objetos del tipo Venta en una lista de objetos VentaResponseDTO. Esta transformación
+     * es útil para exponer solo los datos necesarios al cliente, manteniendo así la capa de persistencia desacoplada de la capa de presentación.
+     *
      * @param ventas la lista de entidades Venta a convertir
      * @return la lista de DTOs de respuesta correspondientes
      */
     public List<VentaResponseDTO> toResponseDTO(List<Venta> ventas){
+
+        // Inicia un Stream a partir de la lista de objetos Venta.
+        // Un Stream permite operar sobre los elementos de forma funcional y más expresiva
         return ventas.stream()
-                    .map(this::toResponseDTO)
-                    .toList();
+                    .map(this::toResponseDTO) // Aplica una transformación (mapeo) a cada objeto Venta en el Stream.
+                    .toList();  // Convierte el Stream resultante (de tipo Stream<VentaResponseDTO>) a una lista de tipo List<VentaResponseDTO>.
     }
 }
