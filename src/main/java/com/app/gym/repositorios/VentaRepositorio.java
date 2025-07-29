@@ -12,6 +12,16 @@ import com.app.gym.modelos.Venta;
 import com.app.gym.modelos.VentaId;
 
 public interface VentaRepositorio extends JpaRepository<Venta, VentaId> {
+    
+    /**
+     * Crear el id manualmente para las ventas en un mes específico.
+     * @param inicio la fecha de inicio del mes
+     * @param fin la fecha de fin del mes  
+     * @return el ID máximo de venta encontrado en el mes, o 0 si no hay ventas
+     */
+    @Query(value = "SELECT COALESCE(MAX(v.id_venta), 0) FROM ventas v WHERE v.fecha BETWEEN :inicio AND :fin", nativeQuery = true)
+    Integer findMaxIdVentaByMonth(@Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
+    
     /**
      * Busca una venta por su ID y fecha.
      *
@@ -38,13 +48,4 @@ public interface VentaRepositorio extends JpaRepository<Venta, VentaId> {
      */
     @Query("SELECT v FROM Venta v WHERE v.fecha BETWEEN :inicio AND :fin") // JPQL query para buscar ventas en un cierto rango de fechas
     List<Venta> findByRangoFechas (@Param("inicio") LocalDate inicio, @Param("fin")LocalDate fin);
-
-    /**
-     * Crear el id manualmente para las ventas en un mes específico.
-     * @param inicio la fecha de inicio del mes
-     * @param fin la fecha de fin del mes  
-     * @return el ID máximo de venta encontrado en el mes, o 0 si no hay ventas
-     */
-    @Query(value = "SELECT COALESCE(MAX(v.id_venta), 0) FROM ventas v WHERE v.fecha BETWEEN :inicio AND :fin", nativeQuery = true)
-    Integer findMaxIdVentaByMonth(@Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
 }
