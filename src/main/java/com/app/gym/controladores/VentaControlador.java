@@ -37,7 +37,7 @@ public class VentaControlador {
     }
 
     /*--------------------------------------------------------------
-     * 1. Crear venta
+     * 1. Crear venta. /api/ventas/registrar
      *-------------------------------------------------------------*/
 
     /**
@@ -66,9 +66,9 @@ public class VentaControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(ventaServicio.toResponseDTO(ventas)); // Si no hay errores, continua con la lógica normal
     }
 
-    /*--------------------------------------------------------------
-     * 2. Actualizar venta (cantidad / anular)
-     *-------------------------------------------------------------*/
+    /*--------------------------------------------------------------------------------------------------------
+     * 2. Actualizar venta (cantidad / anular). /api/ventas/{id}/{fecha}     formato de la fecha: YYYY-MM-DD
+     *--------------------------------------------------------------------------------------------------------*/
 
     /**
      * Actualiza una venta existente.
@@ -83,8 +83,9 @@ public class VentaControlador {
                                             @Valid @RequestBody VentaActualizarDto dto, BindingResult br) {
         if (br.hasErrors()) {
             List<String> errores = br.getFieldErrors().stream()
-                    .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                    .toList();
+                                                        .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                                                        .toList();
+
             return ResponseEntity.badRequest().body(Map.of("errores", errores));
 
         }
@@ -92,9 +93,9 @@ public class VentaControlador {
         return ResponseEntity.ok(ventaServicio.toResponseDTO(actualizada));
     }
 
-    /*--------------------------------------------------------------
-     * 3. Buscar venta por PK
-     *-------------------------------------------------------------*/
+    /*--------------------------------------------------------------------------------------
+     * 3. Buscar venta por PK. /api/ventas/{id}/{fecha}    formato de la fecha: YYYY-MM-DD
+     *-------------------------------------------------------------------------------------*/
     
     /**
      * Busca una venta por su ID y fecha.
@@ -110,22 +111,22 @@ public class VentaControlador {
                                                                             .body(Map.of("mensaje", "Venta no encontrada")));
 	}
 
-    /*--------------------------------------------------------------
-     * 4. Ventas de un día  (?fecha=YYYY-MM-DD)
-     *-------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------
+     * 4. Ventas de un día. /api/ventas?fecha=2025-01-01   formato de la fecha: YYYY-MM-DD
+     *-----------------------------------------------------------------------------------*/
     /**
      * Busca todas las ventas realizadas en una fecha específica.
      * @param fecha la fecha de las ventas
      * @return una lista de ventas realizadas en esa fecha o un error si no se encuentran
      */
-    @GetMapping(params = "fecha")
-    public ResponseEntity<?> buscarVentaPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
+    @GetMapping(params = "fecha") 
+    public ResponseEntity<?> buscarVentasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 
         // Obtener la fecha actual para validar el rango
         LocalDate fechaActual = LocalDate.now();
 
-        // Validar que la fecha no sea futura o anterior al año 2024
-        if(fecha.isAfter(fechaActual) || fecha.getYear() < 2024){
+        // Validar que la fecha no sea futura o anterior al año 2025
+        if(fecha.isAfter(fechaActual) || fecha.getYear() < 2025){
             return ResponseEntity.badRequest().body(Map.of("error", "Fecha inválida: fuera del rango permitido"));
         }
 
@@ -139,9 +140,9 @@ public class VentaControlador {
 			return ResponseEntity.ok(ventaServicio.toResponseDTO(ventas));
     }
 
-    /*--------------------------------------------------------------
-     * 5. Ventas de un mes (?anio=YYYY&mes=MM)
-     *-------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------
+     * 5. Ventas de un mes. /api/ventas?anio=2025&mes=01    formato de la fecha: YYYY-MM-DD
+     *---------------------------------------------------------------------------------------*/
     
     /**  
      * Busca todas las ventas realizadas en un mes específico.
@@ -155,7 +156,7 @@ public class VentaControlador {
         // Validar que el mes y año sean válidos
         try {
             YearMonth fecha = YearMonth.of(anio, mes);
-            if(fecha.isAfter(YearMonth.now()) || anio < 2024){
+            if(fecha.isAfter(YearMonth.now()) || anio < 2025){
                     return ResponseEntity.badRequest().body(Map.of("error", "Fecha inválida: fuera del rango permitido"));
             } 
         } catch (DateTimeException e){
@@ -164,16 +165,18 @@ public class VentaControlador {
 	
         // Buscar las ventas por mes
         List<Venta> ventas = ventaServicio.buscarPorMes(anio, mes); 
-            if(ventas.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Sin ventas para el período indicado"));
-            }
+
+        // Si no se encuentran ventas, retornar un mensaje de error
+        if(ventas.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Sin ventas para el período indicado"));
+        }
 
         return ResponseEntity.ok(ventaServicio.toResponseDTO(ventas));
     }
 
-    /*--------------------------------------------------------------
-     * 6. Ventas por rango (?inicio=YYYY-MM-DD&fin=YYYY-MM-DD)
-     *-------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------
+     * 6. Ventas por rango. /api/ventas?inicio=2025-01-01&fin=2025-01-31    formato de la fecha: YYYY-MM-DD
+     *------------------------------------------------------------------------------------------------------*/
 
     /**
      * Busca todas las ventas realizadas en un rango de fechas.
@@ -189,8 +192,8 @@ public class VentaControlador {
 	LocalDate fechaActual = LocalDate.now();
 
     // Validar que el rango de fechas sea válido
-	if(inicio.getYear() < 2024 || inicio.isAfter(fechaActual) || fin.isBefore(inicio)){
-		return ResponseEntity.badRequest().body(Map.of("error", "Debe ingresar un rango de fecha válido (Nota: debe ser después de 2024)"));
+	if(inicio.getYear() < 2025 || inicio.isAfter(fechaActual) || fin.isBefore(inicio)){
+		return ResponseEntity.badRequest().body(Map.of("error", "Debe ingresar un rango de fecha válido (Nota: debe ser después de 2025"));
 	}
 	
     // Buscar las ventas por rango de fechas

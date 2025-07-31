@@ -32,6 +32,9 @@ public class AsistenciaGeneral {
     @Column(name = "hora_entrada")
     private LocalTime horaEntrada; // Hora de entrada del usuario
 
+    @Column(nullable = false)
+    private boolean anulada = false; // Marca si la asistencia está anulada (soft-delete)
+
     /*
      * Relación con la entidad HorarioPorDia.
      * Esta relación indica que una asistencia general está asociada a un horario específico del día.
@@ -84,6 +87,14 @@ public class AsistenciaGeneral {
         this.horaEntrada = horaEntrada;
     }
 
+    public Boolean getAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(Boolean anulada) {
+        this.anulada = anulada;
+    }
+
     public HorarioPorDia getHorarioPorDia() {
         return horarioPorDia;
     }
@@ -107,6 +118,7 @@ public class AsistenciaGeneral {
                 "idAsistencia=" + idAsistencia +
                 ", fecha=" + fecha +
                 ", horaEntrada=" + horaEntrada +
+                ", anulada=" + anulada +
                 ", horarioPorDia=" + horarioPorDia +
                 ", usuario=" + usuario +
                 '}';

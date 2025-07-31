@@ -139,6 +139,7 @@ public class Venta {
                 ", fecha=" + fecha +
                 ", cantidad=" + cantidad +
                 ", total=" + total +
+                ", anulada=" + anulada +
                 ", usuario=" + usuario +
                 ", producto=" + producto +
                 '}';

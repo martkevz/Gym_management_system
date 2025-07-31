@@ -127,9 +127,7 @@ public class VentaServicio {
                                     .orElseThrow(() -> new RecursoNoEncontradoExcepcion
                                     ("Venta no encontrada con ID: " + idVenta + " y fecha: " + fecha));
 
-        /*Actualizar los campos de la venta con los datos del DTO 
-        * y el trigger va a recalculará total
-        */
+        //Actualizar los campos de la venta con los datos del DTO y el trigger va a recalculará total
         venta.setCantidad(dto.getCantidad());
 
         // Si el DTO indica que la venta está anulada, se actualiza el estado de la venta
@@ -137,16 +135,14 @@ public class VentaServicio {
             venta.setAnulada(true);;
         }
         
-        // Guardar y forzar sincronización
-        // con la base de datos para asegurarnos de que los cambios se reflejen inmediatamente
+        // Guardar y forzar sincronización con la base de datos para asegurarnos de que los cambios se reflejen inmediatamente
         // y luego refrescar la entidad para obtener los datos actualizados.
         Venta ventaActualizada = ventaRepositorio.saveAndFlush(venta);
         
         // Refrescar después de guardar
         entityManager.refresh(ventaActualizada);
         
-        // Retornar la venta actualizada
-        // Esto asegura que la venta tenga los datos más recientes después de la actualización
+        // Retornar la venta actualizada. Esto asegura que la venta tenga los datos más recientes después de la actualización
         return ventaActualizada;
     }
 
