@@ -14,7 +14,7 @@ public class VentaActualizarDto {
     @Min(value = 1, message = "La cantidad debe ser al menos 1")
     private Integer cantidad;
 
-    /** Marca la venta como anulada (soft-delete) */
+    /** Marca la venta como anulada (soft-delete) que por defecto el false*/
     private Boolean anulada;
 
     //Getters y Setters

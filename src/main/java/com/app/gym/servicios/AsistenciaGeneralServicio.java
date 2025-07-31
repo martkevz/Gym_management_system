@@ -4,25 +4,25 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.app.gym.dtos.AsistenciaGeneralActualizarDTO;
 import com.app.gym.dtos.AsistenciaGeneralResponseDTO;
 import com.app.gym.dtos.AsistenciaRequestDTO;
 import com.app.gym.dtos.HorarioPorDiaSimpleDTO;
 import com.app.gym.dtos.UsuarioSimpleDTO;
-import com.app.gym.dtos.VentaResponseDTO;
 import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
 import com.app.gym.modelos.AsistenciaGeneral;
 import com.app.gym.modelos.HorarioPorDia;
 import com.app.gym.modelos.Usuario;
-import com.app.gym.modelos.Venta;
 import com.app.gym.repositorios.AsistenciaGeneralRepositorio;
 import com.app.gym.repositorios.HorarioPorDiaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
 
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -111,6 +111,96 @@ public class AsistenciaGeneralServicio {
         return asistenciaGuardada;
     }
 
+    // ------------------------------------------------------------------
+    // Operaciones de actualización
+    // ------------------------------------------------------------------
+
+    /**
+     * Actualiza una asistencia general existente.
+     *
+     * @param idAsistencia el ID de la asistencia a actualizar
+     * @param fecha la fecha de la asistencia a actualizar
+     * @param dto los nuevos datos de la asistencia
+     * @return la asistencia actualizada
+     */
+    @Transactional
+	public AsistenciaGeneral actualizarAsistenciaGeneral(Integer idAsistencia, LocalDate fecha, AsistenciaGeneralActualizarDTO dto){
+
+        AsistenciaGeneral asistencia = asistenciaGeneralRepositorio.findByIdAsistenciaAndFecha(idAsistencia, fecha)
+                                                                    .orElseThrow(() -> new RecursoNoEncontradoExcepcion
+                                                                    ("Asistencia no encontrada con ID: " + idAsistencia + " y fecha: " + fecha));
+
+        //Actualizar los campos de la venta con los datos del DTO y el trigger va a recalculará total
+        asistencia.setHoraEntrada(dto.getHoraEntrada());
+
+        // Si el DTO indica que la asistencia está anulada, se actualiza el estado de la asistencia
+        if(Boolean.TRUE.equals(dto.getAnulada())){
+            asistencia.setAnulada(dto.getAnulada());
+        }
+
+        // Guardar y forzar sincronización con la base de datos para asegurarnos de que los cambios se reflejen inmediatamente
+        // y luego refrescar la entidad para obtener los datos actualizados.
+        AsistenciaGeneral asistenciaActualizada = asistenciaGeneralRepositorio.saveAndFlush(asistencia); 
+
+        // Refrescar después de guardar
+        entityManager.refresh(asistenciaActualizada);
+
+        // Retornar la asistencia actualizada. Esto asegura que la asistencia tenga los datos más recientes después de la actualización
+        return asistenciaActualizada;
+    }
+
+    // ------------------------------------------------------------------
+    // Operaciones de consulta
+    // ------------------------------------------------------------------
+
+    /**
+     * Busca una asistencia por su ID y fecha.
+     *
+     * @param id el ID de la Asistencia
+     * @param fecha la fecha de la Asitencia
+     * @return un Optional que contiene la asistencia si se encuentra, o vacío si no
+     */
+    @Transactional(readOnly = true)
+    public Optional<AsistenciaGeneral> buscarPorIdFecha (Integer idAsistencia, LocalDate fecha){
+        return asistenciaGeneralRepositorio.findByIdAsistenciaAndFecha(idAsistencia, fecha);
+    }
+
+    /**
+     * Busca todas las asistencias realizadas en una fecha específica.
+     *
+     * @param fecha la fecha de la asistencia
+     * @return una lista de asistencias realizadas en esa fecha
+     */
+    @Transactional(readOnly = true)
+    public List<AsistenciaGeneral> buscarPorFecha(LocalDate fecha){
+        return asistenciaGeneralRepositorio.findByFecha(fecha);
+    }
+
+    /**
+     * Busca todas las asistencias realizadas en un mes específico.
+     *
+     * @param year el año del mes a buscar
+     * @param month el mes a buscar
+     * @return una lista de asistencias realizadas en ese mes
+     */
+    @Transactional(readOnly = true)
+    public List<AsistenciaGeneral> buscarPorMes(int year, int month){
+        YearMonth ym = YearMonth.of(year, month);
+        return asistenciaGeneralRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
+    }
+
+    /**
+     * Busca todas las asistencias que hay en un rango de fechas.
+     *
+     * @param inicio la fecha de inicio del rango
+     * @param fin la fecha de fin del rango
+     * @return una lista de asistencias realizadas en el rango de fechas
+     */
+    @Transactional(readOnly = true)
+    public List<AsistenciaGeneral> buscarPorRangoFechas(LocalDate inicio, LocalDate fin){
+        return asistenciaGeneralRepositorio.findByRangoFechas(inicio, fin);
+    }
+
     // ------------------------------------------------------------------ 
     public AsistenciaGeneralResponseDTO toResponseDTO (AsistenciaGeneral asistenciaGeneral){
 
@@ -157,5 +247,4 @@ public class AsistenciaGeneralServicio {
                     .map(this::toResponseDTO) // Aplica una transformación (mapeo) a cada objeto AsistenciaGeneral en el Stream.
                     .toList(); // Convierte el Stream resultante (de tipo Stream<AsistenciaGeneralResponseDTO>) a una lista de tipo List<AsistenciaGeneralResponseDTO>.
     }
-
 }
