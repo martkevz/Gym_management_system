@@ -12,15 +12,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Asistencia_clases_aerobicas") // Nombre de la tabla en la base de datos
+@Table(name = "Asistencia_clases_aerobicas")
 public class AsistenciaClaseAerobica {
     
     /*
      * Esta clase representa la asistencia a clases aeróbicas en el sistema de gestión de gimnasio.
-     * Cada instancia de esta clase corresponde a una asistencia específica
      */
 
-    // Atributo para almacenar el identificador único de la asistencia a la clase aeróbica.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_asistencia_aerobica", nullable = false)
@@ -42,7 +40,6 @@ public class AsistenciaClaseAerobica {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    //Constructor vacío
     public AsistenciaClaseAerobica() {
     }
 

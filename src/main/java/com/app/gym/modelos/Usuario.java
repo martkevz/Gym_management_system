@@ -15,15 +15,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "usuarios") // Nombre de la tabla en la base de datos
+@Table(name = "usuarios") 
 public class Usuario {
 
-    /*
-     * Esta clase representa a un usuario del sistema de gestión de gimnasio.
-     * Cada instancia de esta clase corresponde a un usuario específico y contiene
-     * información relevante como nombre, apellido, fecha de nacimiento, email,
-     * fecha de inicio y fin de membresía.
-     */
+    // Esta clase representa a un usuario del sistema de gestión de gimnasio. Cada instancia de esta clase corresponde a un usuario específico
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +36,7 @@ public class Usuario {
     @Column(name = "email", unique = true) // Aseguramos que el email sea único en la base de datos
     private String email;
 
-    // Atributo para almacenar la fecha de inicio de la membresía del usuario.
+    // Atributo para almacenar la fecha de inicio y fin de la membresía del usuario.
     // En postgresql, será de tipo DATE.
     @Column(name = "fecha_inicio_membresia", nullable = false)
     private Date fechaInicioMembresia;
@@ -49,40 +44,19 @@ public class Usuario {
     @Column(name = "fecha_fin_membresia", nullable = false)
     private Date fechaFinMembresia;
 
-    /*
-     * Relación con la entidad Membresia.
-     * Esta relación indica que un usuario puede tener una membresía asociada.
-     * Se utiliza @OneToOne para establecer una relación uno a uno con la entidad
-     * Membresia, donde cada usuario puede tener una membresía específica.
-     */
+    // Relación con la entidad Membresia.
     @OneToOne
     @JoinColumn(name = "id_membresia", referencedColumnName = "id_membresia", nullable = false)
     private Membresia membresia;
 
-    /*
-     * Relación con la entidad Venta.
-     * Esta relación indica que un usuario puede tener múltiples ventas asociadas.
-     * Se utiliza @OneToMany para establecer una relación uno a muchos con la entidad
-     * venta, donde cada usuario puede tener varias ventas registradas.
-     */
+    //Relación con la entidad Venta.
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Venta> venta;
 
-    /*
-     * Relación con la entidad Asistencia General.
-     * Esta relación indica que un usuario puede tener múltiples asistencias
-     * registradas. Se utiliza @OneToMany para establecer una relación uno a muchos
-     * con la entidad asistencia_general, donde cada usuario puede tener varias asistencias
-     * asociadas.
-     */
+    // Relación con la entidad Asistencia General.
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<AsistenciaGeneral> asistenciaGeneral;
 
-    /*
-     * Constructor vacío requerido por JPA.
-     * Este constructor es necesario para que JPA pueda crear instancias de la
-     * entidad Usuario al recuperar datos de la base de datos.
-     */
     public Usuario() {
     }
 
@@ -167,11 +141,7 @@ public class Usuario {
         this.asistenciaGeneral = asistenciaGeneral;
     }
 
-    /* Método toString para facilitar la visualización de los datos
-     * del usuario. Este método devuelve una representación en cadena de los
-     * atributos del usuario, incluyendo el nombre de la membresía si está
-     * asociada.
-     */
+    // Método toString para facilitar la visualización de los datos
     @Override
     public String toString() {
         return "Usuario{" +

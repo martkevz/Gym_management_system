@@ -33,41 +33,20 @@ public class ProductoStockBajo {
     @Column(name = "porcentaje_stock")
     private Double porcentajeStock;
 
-    /**
-     * Obtiene el identificador del producto.
-     *
-     * @return idProducto
-     */
+    //getters y setters
     public Integer getIdProducto() {
         return idProducto;
     }
 
-    /**
-     * Obtiene el nombre del producto.
-     *
-     * @return nombre
-     */
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * Obtiene la cantidad de unidades disponibles del producto.
-     *
-     * @return cantidadDisponible
-     */
     public Integer getCantidadDisponible() {
         return cantidadDisponible;
     }
 
-    /**
-     * Obtiene el porcentaje del stock disponible respecto al total.
-     *
-     * @return porcentajeStock
-     */
     public Double getPorcentajeStock() {
         return porcentajeStock;
     }
-
-    
 }

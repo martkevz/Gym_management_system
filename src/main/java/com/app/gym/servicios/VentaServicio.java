@@ -15,6 +15,7 @@ import com.app.gym.modelos.Producto;
 import com.app.gym.modelos.Usuario;
 import com.app.gym.modelos.Venta;
 import com.app.gym.repositorios.VentaRepositorio;
+import com.app.gym.validadores.FechaValidador;
 
 import jakarta.persistence.EntityManager;
 
@@ -170,6 +171,7 @@ public class VentaServicio {
      */
     @Transactional(readOnly = true)
     public List<Venta> buscarPorFecha (LocalDate fecha){
+        FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
         return ventaRepositorio.findByFecha(fecha);
     }
 
@@ -182,9 +184,11 @@ public class VentaServicio {
      */
     @Transactional
     public List<Venta> buscarPorMes(int year, int month){
-        YearMonth ym = YearMonth.of(year, month);
-        return ventaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
 
+        FechaValidador.validarYearMonth(year, month); // Validar el año y mes proporcionados
+        YearMonth ym = YearMonth.of(year, month);
+
+        return ventaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
     }
     
     /**
@@ -196,6 +200,9 @@ public class VentaServicio {
      */
     @Transactional(readOnly = true)
     public List<Venta> buscarPorRangoFechas(LocalDate inicio, LocalDate fin){
+
+        FechaValidador.validarRangoFechas(inicio, fin); 
+        
         return ventaRepositorio.findByRangoFechas(inicio, fin);
     }
 

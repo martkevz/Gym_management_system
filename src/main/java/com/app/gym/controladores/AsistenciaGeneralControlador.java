@@ -1,8 +1,6 @@
 package com.app.gym.controladores;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 
@@ -116,14 +114,6 @@ public class AsistenciaGeneralControlador {
       */
     @GetMapping(params = "fecha")
     public ResponseEntity<?> buscarAsistenciasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-    
-    // Obtener la fecha actual para validar el rango
-        LocalDate fechaActual = LocalDate.now();
-        
-        // Validar que la fecha no sea futura o anterior al año 2025
-        if(fecha.isAfter(fechaActual) || fecha.getYear() < 2025){
-            return ResponseEntity.badRequest().body(Map.of("error", "Fecha inválida: fuera del rango permitido"));
-        }
         
         // Buscar las ventas por fecha
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorFecha(fecha);
@@ -149,17 +139,6 @@ public class AsistenciaGeneralControlador {
     @GetMapping(params = {"anio", "mes"})
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
         
-        // Validar que el mes y año sean válidos
-        try{
-            YearMonth fecha = YearMonth.of(anio, mes);
-
-            if(fecha.isAfter(YearMonth.now()) || anio < 2025 ){
-                return ResponseEntity.badRequest().body(Map.of("error", "Fecha inválida: fuera del rango permitido"));
-            }  
-        } catch (DateTimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Mes o año no válido."));
-        }
-        
         // Buscar las ventas por mes
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorMes(anio, mes);
         
@@ -184,15 +163,6 @@ public class AsistenciaGeneralControlador {
     @GetMapping(params = {"inicio", "fin"})
     public ResponseEntity<?> buscarPorRangoFechas (@RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate inicio, 
                                                     @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate fin){
-
-        // Obtener la fecha actual para validar el rango
-        LocalDate fechaActual = LocalDate.now();
-        
-        // Validar que el rango de fechas sea válido
-        if(inicio.getYear() < 2025 || inicio.isAfter(fechaActual) || fin.isBefore(inicio)){
-            return ResponseEntity.badRequest().body(Map.of("error", "Debe ingresar un rango de fecha válido (Nota: debe ser después de 2025"));
-        }
-        
         // Buscar las asistencias por rango de fechas
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorRangoFechas(inicio, fin);
         
@@ -203,6 +173,6 @@ public class AsistenciaGeneralControlador {
         
         // Retornar las asistencias encontradas
         return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencias));
-}
+    }
 
 }

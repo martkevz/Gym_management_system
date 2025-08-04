@@ -150,7 +150,6 @@ public class AsistenciaClaseAerobicaServicio {
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorFecha(LocalDate fecha){
 
         FechaValidador.validarFecha(fecha); // Validar que la fecha no sea futura y esté dentro de un rango razonable
-
         return asistenciaClaseAerobicaRepositorio.findByFecha(fecha);
     }
 

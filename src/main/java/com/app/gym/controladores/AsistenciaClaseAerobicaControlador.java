@@ -41,9 +41,9 @@ public class AsistenciaClaseAerobicaControlador {
      * @param br BindingResult para manejar errores de validación
      * @return ResponseEntity con el estado y el DTO de respuesta
      */
-    /*---------------------------------------------------------------------
+    /*-------------------------------------------------------------------------------------
 	 * 1. Registrar asistencia clase aerobica (api/asistencia-clase-aerobica/registrar)
-	 *--------------------------------------------------------------------*/
+	 *------------------------------------------------------------------------------------*/
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarAsistenciaClaseAerobica(@Valid @RequestBody AsistenciaClaseAerobicaRequestDTO dto, BindingResult br){ //@valid valida las notaciones (como @NotNull) del DTO
 	
@@ -61,7 +61,9 @@ public class AsistenciaClaseAerobicaControlador {
         
         return ResponseEntity.status(HttpStatus.CREATED).body(asistenciaClaseAerobicaServicio.toResponseDTO(asistencia));
     }	
-    
+    /*-------------------------------------------------------------------------------------
+	 * 2. Actualizar asistencia clase aerobica (api/asistencia-clase-aerobica/{id})
+	 *------------------------------------------------------------------------------------*/
     /**
      * Actualiza una asistencia de clase aeróbica existente.
      *
@@ -76,6 +78,9 @@ public class AsistenciaClaseAerobicaControlador {
         return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistencia));
     }
 
+    /*-------------------------------------------------------------------------------------
+     * 3. Obtener asistencia clase aerobica por id (api/asistencia-clase-aerobica/{id})
+     *------------------------------------------------------------------------------------*/
     /**
      * Obtiene una asistencia de clase aeróbica por su ID.
      *
@@ -90,6 +95,9 @@ public class AsistenciaClaseAerobicaControlador {
                                                                         .body(Map.of("mensaje", "No se encontró la asistencia con ID " + id)));
     }
 
+    /*--------------------------------------------------------------------------------------------------------
+     * 4. Buscar asistencias clase aerobica por fecha, mes o rango de fechas (api/asistencia-clase-aerobica)
+     *-------------------------------------------------------------------------------------------------------*/
     /**
      * Busca asistencias de clase aeróbica por fecha.
      *
