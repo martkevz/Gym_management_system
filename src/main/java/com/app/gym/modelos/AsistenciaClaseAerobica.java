@@ -1,5 +1,7 @@
 package com.app.gym.modelos;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,29 +21,23 @@ public class AsistenciaClaseAerobica {
      */
 
     // Atributo para almacenar el identificador único de la asistencia a la clase aeróbica.
-    // Este campo es de tipo Integer y se generará automáticamente al insertar un nuevo registro en
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_asistencia_aerobica", nullable = false)
     private Integer idAsistenciaClaseAerobica;
 
-    /*
-     * Relación con la entidad ClaseAerobica.
-     * Esta relación indica que una asistencia a una clase aeróbica está asociada a una
-     * clase aeróbica específica.
-     * Se utiliza @ManyToOne para establecer una relación muchos a uno con la entidad ClaseAerobica,
-     * donde múltiples asistencias pueden estar asociadas a una sola clase aeróbica.
-     */
+    @Column(nullable = false)
+    private boolean anulada = false; // Marca si la asistencia está anulada (soft-delete)
+
+    @Column(nullable = false)
+    private LocalDate fecha;
+
+    // Relación con la entidad ClaseAerobica.
     @ManyToOne
     @JoinColumn(name = "id_clase", referencedColumnName = "id_clase", nullable = false)
     private ClaseAerobica claseAerobica;
 
-    /*
-     * Relación con la entidad Usuario.
-     * Esta relación indica que una asistencia a una clase aeróbica está asociada a un usuario específico.
-     * Se utiliza @ManyToOne para establecer una relación muchos a uno con la entidad Usuario,
-     * donde múltiples asistencias pueden estar asociadas a un solo usuario.
-     */
+    //Relación con la entidad Usuario.
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private Usuario usuario;
@@ -51,7 +47,6 @@ public class AsistenciaClaseAerobica {
     }
 
     // Getters y Setters
-
     public Integer getIdAsistenciaClaseAerobica() {
         return idAsistenciaClaseAerobica;
     }
@@ -76,11 +71,29 @@ public class AsistenciaClaseAerobica {
         this.usuario = usuario;
     }
 
+    public boolean getAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
     // Método toString para representar la asistencia a clase aeróbica
     @Override
     public String toString() {
         return "AsistenciaClaseAerobica{" +
                 "idAsistenciaClaseAerobica=" + idAsistenciaClaseAerobica +
+                ", fecha=" + fecha +
+                ", anulada=" + anulada +
                 ", claseAerobica=" + claseAerobica +
                 ", usuario=" + usuario +
                 '}';

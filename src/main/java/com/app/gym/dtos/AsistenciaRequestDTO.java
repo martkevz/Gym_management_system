@@ -7,6 +7,11 @@ import jakarta.validation.constraints.NotNull;
 
 public class AsistenciaRequestDTO {
     
+    /*
+     * DTO para la solicitud de asistencia a una clase aeróbica.
+     * Contiene los campos necesarios para registrar (create) la asistencia de un usuario a una clase específica.
+     */
+
     /** Opcional: si no viene se usará la fecha actual. */
     private LocalDate fecha;
 

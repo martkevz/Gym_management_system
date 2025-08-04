@@ -1,7 +1,5 @@
 package com.app.gym.dtos;
 
-import java.time.LocalTime;
-
 public class HorarioPorDiaSimpleDTO {
     
     /*
@@ -12,8 +10,6 @@ public class HorarioPorDiaSimpleDTO {
 
     private Integer idHorario;
     private String dia;
-    private LocalTime horaApertura;
-    private LocalTime horaCierre;
 
     // Getters y Setters
     public Integer getIdHorario() {
@@ -30,21 +26,5 @@ public class HorarioPorDiaSimpleDTO {
 
     public void setDia(String dia) {
         this.dia = dia;
-    }
-
-    public LocalTime getHoraApertura() {
-        return horaApertura;
-    }
-
-    public void setHoraApertura(LocalTime horaApertura) {
-        this.horaApertura = horaApertura;
-    }
-
-    public LocalTime getHoraCierre() {
-        return horaCierre;
-    }
-
-    public void setHoraCierre(LocalTime horaCierre) {
-        this.horaCierre = horaCierre;
     }
 }

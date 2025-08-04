@@ -15,6 +15,7 @@ public class AsistenciaGeneralResponseDTO {
     private LocalTime horaEntrada;
     private HorarioPorDiaSimpleDTO horario;
     private UsuarioSimpleDTO usuario;
+    private Boolean anulada;
 
     // Getters y Setters
     public Integer getIdAsistencia() {
@@ -47,5 +48,10 @@ public class AsistenciaGeneralResponseDTO {
     public void setUsuario(UsuarioSimpleDTO usuario) {
         this.usuario = usuario;
     }
-    
+    public Boolean getAnulada() {
+        return anulada;
+    }
+    public void setAnulada(Boolean anulada) {
+        this.anulada = anulada;
+    }
 }
