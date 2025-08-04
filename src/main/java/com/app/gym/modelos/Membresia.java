@@ -12,53 +12,37 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "membresias") // Nombre de la tabla en la base de datos
+@Table(name = "membresias")
 public class Membresia {
-    /*  
-     *  Esta tabla almacena los planes disponibles para pagar en el gimnasio y sus precios ------------------------------------
-     */
+
+    //Esta tabla almacena los planes disponibles para pagar en el gimnasio y sus precios ------------------------------------
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Generación automática del ID de membresía
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_membresia", nullable = false)
     private Integer idMembresia; 
 
-    /*  
-     *  Nombre de la membresía, por ejemplo: quincenal, mensual, trimestral, anual, etc.
-     */
-    @Column(length = 30) // Longitud máxima de 30 caracteres
+    //Nombre de la membresía, por ejemplo: quincenal, mensual, trimestral, anual, etc.
+    @Column(length = 30)
     private String nombre;
 
-    /*  
-     *  Cuál es la duración de la membresía (Ej: 15 días, 1 mes, 3 meses, 1 año...).
-     */
-    @Column(length = 10) // Longitud máxima de 10 caracteres
+    //Cuál es la duración de la membresía (Ej: 15 días, 1 mes, 3 meses, 1 año...).
+    @Column(length = 10)
     private String duracion;
 
-    /*  
-     *  Precio de la membresía.
-     */ 
+    //Precio de la membresía.
     @Column(precision = 5, scale = 2) // Hasta 5 dígitos en total, con 2 decimales
     // Ejemplo: 999.99
     private BigDecimal precio;
 
-    /*  
-     * Relación con otras entidades:
-     * Esta relaciona uno a uno con Usuarios, donde cada usuario puede tener una membresía. (da la pk a Usuarios)------------
-     */
-    @OneToOne(mappedBy = "membresia", cascade = CascadeType.ALL) //"membresia" es el linker
-    private Usuario usuario; //objeto de la tabla a la que damos la pk 
+    //Esta relaciona uno a uno con Usuarios, donde cada usuario puede tener una membresía.
+    @OneToOne(mappedBy = "membresia", cascade = CascadeType.ALL)
+    private Usuario usuario;
 
-    /*  
-     *  Constructor por defecto ------------------------------------------------------------------------------------------------
-     */
     public Membresia() {
-        // Constructor por defecto
     }
 
-    /*  
-     *  Getters y setters  ----------------------------------------------------------------------------------------------------
-     */
+    //Getters y setters  ----------------------------------------------------------------------------------------------------
     public Integer getIdMembresia() {
         return idMembresia;
     }

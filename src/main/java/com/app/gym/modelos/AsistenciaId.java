@@ -15,7 +15,6 @@ public class AsistenciaId implements Serializable{
     private LocalDate fecha;
 
     public AsistenciaId() {
-        // Constructor por defecto
     }
 
     /**
@@ -29,9 +28,7 @@ public class AsistenciaId implements Serializable{
         this.fecha = fecha;
     }
 
-    /*
-     * Getters y setters
-     */
+    //Getters y setters
     public Integer getIdAsistencia() {
         return idAsistencia;
     }

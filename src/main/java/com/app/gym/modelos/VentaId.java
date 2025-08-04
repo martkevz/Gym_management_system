@@ -11,28 +11,18 @@ public class VentaId implements Serializable{
      * Esta clase implementa Serializable para permitir su uso como clave primaria en JPA.
      */
     
-    private Integer idVenta; // Identificador único de la venta
-    private LocalDate fecha; // Fecha de la venta
+    private Integer idVenta; 
+    private LocalDate fecha;
 
     public VentaId() {
-        // Constructor por defecto
     }
-    /**
-     * Constructor con parámetros para inicializar los campos de la clase.
-     *
-     * @param idVenta Identificador único de la venta.
-     * @param fecha Identificador del producto vendido.
-     */
 
     public VentaId(Integer idVenta, LocalDate fecha) {
         this.idVenta = idVenta;
         this.fecha = fecha;
     }
 
-    /*
-     * Getters y setters
-     */
-
+    // Getters y setters
     public Integer getIdVenta() {
         return idVenta;
     }

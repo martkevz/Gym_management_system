@@ -13,21 +13,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "productos") // Nombre de la tabla en la base de datos
+@Table(name = "productos")
 public class Producto {
-    /*  
-     * Almacena todos los productos que se venden en el gimnasio (como camisas, centros, proteína, creatina, galletas, etc...)------
-     */
+
+    //Almacena todos los productos que se venden en el gimnasio (como camisas, centros, proteína, creatina, galletas, etc...)------
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto", nullable = false)
-    private Integer idProducto; // Identificador único del producto
+    private Integer idProducto; 
 
-    /*  
-     * Nombre del producto, por ejemplo: camiseta, proteína, etc.
-     */
-    @Column(length = 50) // Longitud máxima de 50 caracteres
+    //Nombre del producto, por ejemplo: camiseta, proteína, etc.
+    @Column(length = 50) 
     private String nombre;
 
     /*
@@ -35,38 +32,24 @@ public class Producto {
      * Nota: Usamos TEXT para permitir descripciones largas, ya que algunos productos pueden tener descripciones extensas.
      */
     @Column(columnDefinition = "TEXT")
-    private String descripcion; // Descripción del producto
+    private String descripcion;
 
-    /*  
-     * Precio del producto.
-     */
+    //Precio del producto.
     @Column(precision = 5, scale = 2)
     private BigDecimal precio;
-
-    /*  
-     * Cantidad disponible del producto en inventario.
-     */
+    
+    //Cantidad disponible del producto en inventario.
     @Column(name = "cantidad_disponible")
     private Integer cantidadDisponible;
 
-    /*  
-     * Relación con otras entidades:
-     * Esta relacionada muchos a uno con Venta, un producto puede aparecer en muchas ventas, --------------------------------
-     * y cada venta está asociada a un único producto. (da la pk a Ventas)
-     */
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL) // "producto" es el linker
-    private List<Venta> venta ;// Objeto de la tabla a la que damos la pk
+    //Esta relacionada muchos a uno con Venta, un producto puede aparecer en muchas ventas.
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL) 
+    private List<Venta> venta;
     
-    /*  
-     *  Constructor por defecto ------------------------------------------------------------------------------------------------
-     */
     public Producto() {
-        // Constructor por defecto
     }
 
-    /*  
-     *  Getters y setters ----------------------------------------------------------------------------------------------------
-     */
+    //Getters y setters
     public Integer getIdProducto() {
         return idProducto;
     }

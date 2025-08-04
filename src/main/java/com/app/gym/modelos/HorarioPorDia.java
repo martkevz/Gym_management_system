@@ -13,12 +13,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "horarios_por_dia") // Nombre de la tabla en la base de datos
+@Table(name = "horarios_por_dia")
 public class HorarioPorDia {
     
     /*
      * Esta clase representa los horarios de apertura y cierre del gimnasio por día.
-     * Cada instancia de esta clase corresponde a un día específico y contiene la hora de apertura
+     * Cada instancia de esta clase corresponde a un día específico y contiene la hora de apertura y cierre.
      */
 
     @Id
@@ -28,35 +28,25 @@ public class HorarioPorDia {
 
     /* En este atributo se almacenará cada día de la semana. Por ejemplo:
      * "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo".
-     * Este campo es de tipo String para facilitar la representación del día.
      */
     private String dia;
 
-    /* Atributos para almacenar la hora de apertura y cierre del gimnasio.
-     * Se utilizan tipos LocalTime para representar las horas de manera precisa.
-     */
+    //Atributos para almacenar la hora de apertura y cierre del gimnasio.
     @Column(name = "hora_apertura")
     private LocalTime horaApertura;
 
     @Column(name = "hora_cierre")
     private LocalTime horaCierre;
 
-    /* Relación con la entidad AsistenciaGeneral.
-     * Esta relación indica que un horario por día puede tener múltiples asistencias generales asociadas.
-     * Se utiliza CascadeType.ALL para que las operaciones de persistencia se propaguen a las entidades relacionadas.
-     */
+    //Relación con la entidad AsistenciaGeneral.
     @OneToMany(mappedBy = "horarioPorDia", cascade = CascadeType.ALL)
     private List<AsistenciaGeneral> asistenciaGeneral;
 
-    /* Relación con la entidad ClasesAerobicas.
-     * Esta relación indica que un horario por día puede tener múltiples clases aeróbicas asociadas.
-     * Se utiliza CascadeType.ALL para que las operaciones de persistencia se propaguen a las entidades relacionadas.
-     */
+    //Relación con la entidad ClasesAerobicas.
     @OneToMany(mappedBy = "horarioPorDia", cascade = CascadeType.ALL)
     private List<ClaseAerobica> claseAerobica;
 
     // Getters y Setters
-
     public Integer getIdHorario() {
         return idHorario;
     }

@@ -16,18 +16,15 @@ import jakarta.persistence.Table;
 @Table(name = "asistencia_general")
 public class AsistenciaGeneral {
 
-    /* 
-     * Clase que representa la entidad AsistenciaGeneral en la base de datos.
-     * Esta clase utiliza una clave primaria compuesta definida por la clase AsistenciaId.
-     */
+    //Clase que representa la entidad AsistenciaGeneral en la base de datos. Esta clase utiliza una clave primaria compuesta definida por la clase AsistenciaId.
 
     @Id
     @Column(name = "id_asistencia", nullable = false)
-    private Integer idAsistencia; // Identificador único de la asistencia
+    private Integer idAsistencia; 
 
     @Id
     @Column(nullable = false)
-    private LocalDate fecha; // Fecha de la asistencia
+    private LocalDate fecha; 
 
     @Column(name = "hora_entrada")
     private LocalTime horaEntrada; // Hora de entrada del usuario
@@ -35,31 +32,17 @@ public class AsistenciaGeneral {
     @Column(nullable = false)
     private boolean anulada = false; // Marca si la asistencia está anulada (soft-delete)
 
-    /*
-     * Relación con la entidad HorarioPorDia.
-     * Esta relación indica que una asistencia general está asociada a un horario específico del día.
-     * Se utiliza @ManyToOne para establecer una relación muchos a uno con la entidad HorarioPorDia.
-     * La columna "id_horario" en la tabla asistencia_general hace referencia a la columna "id_horario" en la tabla horario_por_dia.
-     * La relación es obligatoria, por lo que no puede ser nula (nullable = false).
-     */
+    //Relación con la entidad HorarioPorDia.
     @ManyToOne
     @JoinColumn(name = "id_horario", referencedColumnName = "id_horario", nullable = false)
-    private HorarioPorDia horarioPorDia; // Relación con la entidad HorarioPorDia
+    private HorarioPorDia horarioPorDia; 
 
-    /*
-     * Relación con la entidad Usuario.
-     * Esta relación indica que una asistencia general está asociada a un usuario específico.
-     * Se utiliza @ManyToOne para establecer una relación muchos a uno con la entidad Usuario.
-     * La columna "id_usuario" en la tabla asistencia_general hace referencia a la columna "id_usuario" en la tabla usuarios.
-     * La relación es obligatoria, por lo que no puede ser nula (nullable = false).
-     */
+    //Relación con la entidad Usuario.
     @ManyToOne
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
-    private Usuario usuario; // Relación con la entidad Usuario
+    private Usuario usuario; 
 
-    //Constructor por defecto para la clase AsistenciaGeneral.
     public AsistenciaGeneral() {
-        
     }
 
     // Getter y Setters

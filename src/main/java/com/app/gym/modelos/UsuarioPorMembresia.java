@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.Immutable;
 
 @Entity
-@Immutable
+@Immutable // Indica que esta entidad es de solo lectura y no se debe modificar
 @Table(name = "usuarios_por_membresia")
 public class UsuarioPorMembresia {
 
@@ -18,39 +18,21 @@ public class UsuarioPorMembresia {
     * y el monto total generado.
     */
     
-    /**
-     * Identificador de la membresía.
-     * Corresponde al campo 'membresia' de la vista.
-     */
     @Id
     @Column(name = "membresia")
     private String membresia;
 
-    /**
-     * Precio de la membresía.
-     * Corresponde al campo 'precio' de la vista.
-     */
+    // Precio de la membresía.
     private Double precio;
 
-    /**
-     * Cantidad de usuarios asociados a esta membresía.
-     * Corresponde al campo 'cantidad_usuarios' de la vista.
-     */
+    // Cantidad de usuarios asociados a esta membresía.
     @Column(name = "cantidad_usuarios")
     private Integer cantidadUsuarios;
 
-    /**
-     * Monto total generado por esta membresía.
-     * Corresponde al campo 'monto_total_generado' de la vista.
-     */
+    // Monto total generado por esta membresía.
     @Column(name = "monto_total_generado")
     private Double montoTotalGenerado;
 
-    /**
-     * Obtiene el identificador de la membresia.
-     *
-     * @return membresia
-     */
     public String getMembresia() {
         return membresia;
     }
@@ -59,20 +41,10 @@ public class UsuarioPorMembresia {
         return precio;
     }
 
-    /**
-     * Obtiene la cantidad de usuarios asociados a esta membresía.
-     *
-     * @return cantidad de usuarios
-     */
     public Integer getCantidadUsuarios() {
         return cantidadUsuarios;
     }
 
-    /**
-     * Obtiene el monto total generado por esta membresía.
-     *
-     * @return monto total generado
-     */
     public Double getMontoTotalGenerado() {
         return montoTotalGenerado;
     }
