@@ -80,15 +80,7 @@ public class AsistenciaGeneralControlador {
      */
     @PutMapping("/{id}/{fecha}")
     public ResponseEntity<?> actualizarAsistenciaGeneral(@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-                                                        @RequestBody AsistenciaGeneralActualizarDTO dto, BindingResult br){
-        
-        if(br.hasErrors()){
-            List<String> errores = br.getFieldErrors().stream()
-                                                        .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                                                        .toList();
-            
-            return ResponseEntity.badRequest().body(Map.of("errores", errores));
-        }
+                                                        @RequestBody AsistenciaGeneralActualizarDTO dto){
         
         AsistenciaGeneral asistencia = asistenciaGeneralServicio.actualizarAsistenciaGeneral(id, fecha, dto);
 

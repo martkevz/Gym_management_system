@@ -21,7 +21,6 @@ import com.app.gym.repositorios.AsistenciaGeneralRepositorio;
 import com.app.gym.repositorios.HorarioPorDiaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
 
-import jakarta.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -31,14 +30,12 @@ public class AsistenciaGeneralServicio {
     private final UsuarioRepositorio usuarioRepositorio;
     private final HorarioPorDiaRepositorio horarioRepositorio;
     private final AsistenciaGeneralRepositorio asistenciaGeneralRepositorio;
-    private final EntityManager entityManager; // Inyecta el EntityManager para operaciones de persistencia
 
-    public AsistenciaGeneralServicio(EntityManager entityManager, HorarioPorDiaRepositorio horarioRepositorio, AsistenciaGeneralRepositorio asistenciaGeneralRepositorio,
+    public AsistenciaGeneralServicio(HorarioPorDiaRepositorio horarioRepositorio, AsistenciaGeneralRepositorio asistenciaGeneralRepositorio,
                                     UsuarioRepositorio usuarioRepositorio) {
         this.usuarioRepositorio = usuarioRepositorio;
         this.horarioRepositorio = horarioRepositorio;
         this.asistenciaGeneralRepositorio = asistenciaGeneralRepositorio;
-        this.entityManager = entityManager; // Inicializa el EntityManager
     }
 
     // ------------------------------------------------------------------
@@ -97,18 +94,8 @@ public class AsistenciaGeneralServicio {
         asistencia.setHorarioPorDia(horario);
         asistencia.setUsuario(usuario);
 
-        /*
-        * Guardar y forzar sincronización con la BD
-        * es importante usar `saveAndFlush` para asegurarnos de que la operación de guardado se sincronice inmediatamente con la base de datos, 
-        * de modo que el refresh pueda obtener los cambios.
-        */
-        AsistenciaGeneral asistenciaGuardada = asistenciaGeneralRepositorio.saveAndFlush(asistencia);
-
-        // Refrescar después de guardar
-        entityManager.refresh(asistenciaGuardada);
-
         // Retornar la venta guardada
-        return asistenciaGuardada;
+        return asistenciaGeneralRepositorio.save(asistencia); // Guarda la asistencia y retorna la entidad guardada, que ahora tiene el ID asignado.
     }
 
     // ------------------------------------------------------------------
@@ -138,15 +125,8 @@ public class AsistenciaGeneralServicio {
             asistencia.setAnulada(dto.getAnulada());
         }
 
-        // Guardar y forzar sincronización con la base de datos para asegurarnos de que los cambios se reflejen inmediatamente
-        // y luego refrescar la entidad para obtener los datos actualizados.
-        AsistenciaGeneral asistenciaActualizada = asistenciaGeneralRepositorio.saveAndFlush(asistencia); 
-
-        // Refrescar después de guardar
-        entityManager.refresh(asistenciaActualizada);
-
-        // Retornar la asistencia actualizada. Esto asegura que la asistencia tenga los datos más recientes después de la actualización
-        return asistenciaActualizada;
+        // Retornar la asistencia.
+        return asistenciaGeneralRepositorio.save(asistencia);
     }
 
     // ------------------------------------------------------------------
@@ -211,8 +191,6 @@ public class AsistenciaGeneralServicio {
         HorarioPorDiaSimpleDTO h = new HorarioPorDiaSimpleDTO();
         h.setIdHorario(asistenciaGeneral.getHorarioPorDia().getIdHorario());
         h.setDia(asistenciaGeneral.getHorarioPorDia().getDia());
-        h.setHoraApertura(asistenciaGeneral.getHorarioPorDia().getHoraApertura());
-        h.setHoraCierre(asistenciaGeneral.getHorarioPorDia().getHoraCierre()); 
 
         UsuarioSimpleDTO u = new UsuarioSimpleDTO();
         u.setIdUsuario(asistenciaGeneral.getUsuario().getIdUsuario());
@@ -223,6 +201,7 @@ public class AsistenciaGeneralServicio {
         r.setIdAsistencia(asistenciaGeneral.getIdAsistencia());
         r.setFecha(asistenciaGeneral.getFecha());
         r.setHoraEntrada(asistenciaGeneral.getHoraEntrada());
+        r.setAnulada(asistenciaGeneral.getAnulada());
         r.setUsuario(u);
         r.setHorario(h);
 
