@@ -17,11 +17,6 @@ public class UsuarioPorMembresiaServicio {
     
     private final UsuarioPorMembresiaRepositorio repo;
 
-    /**
-     * Constructor que inyecta el repositorio de Usuarios por Membresia.
-     *
-     * @param repositorio instancia de UsuarioPorMembresiaRepositorio
-     */
     public UsuarioPorMembresiaServicio(UsuarioPorMembresiaRepositorio repo) {
         this.repo = repo;
     }

@@ -1,5 +1,6 @@
 package com.app.gym.validadores;
 
+import java.sql.Date;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -58,6 +59,20 @@ public class FechaValidador {
             }
         }catch (DateTimeException e){
             throw new FechaInvalidaExcepcion("Mes o año no válido.");
+        }
+    }
+
+    /**
+     * Valida que el usuario tenga una membresía activa.
+     * Si la fecha de fin de la membresía es nula o anterior a la fecha actual, se lanza una excepción.
+     *
+     * @param fechaFinMembresia la fecha de fin de la membresía del usuario
+     * @throws IllegalStateException si la membresía no está activa
+     */
+    public static void validarFechaFinMembresia(Date fechaFinMembresia){
+
+        if (fechaFinMembresia == null || fechaFinMembresia.toLocalDate().isBefore(LocalDate.now())){
+            throw new IllegalStateException("El usuario no tiene una membresía activa");
         }
     }
 }

@@ -13,11 +13,6 @@ import com.app.gym.repositorios.UsuarioActivoRepositorio;
 public class UsuarioActivoServicio {
     private final UsuarioActivoRepositorio repo;
 
-    /**
-     * Constructor que inyecta el repositorio de Usuarios Activos.
-     *
-     * @param repo instancia de UsuarioActivoRepo
-     */
     public UsuarioActivoServicio(UsuarioActivoRepositorio repo) {
         this.repo = repo;
     }

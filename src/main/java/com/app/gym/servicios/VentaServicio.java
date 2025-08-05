@@ -35,7 +35,7 @@ public class VentaServicio {
     private final VentaRepositorio ventaRepositorio;
     private final UsuarioRepositorio usuarioRepositorio;
     private final ProductoRepositorio productoRepositorio;
-    private final EntityManager entityManager; // Inyecta el EntityManager para operaciones de persistencia
+    private final EntityManager entityManager; 
     /**
      * Constructor del servicio de ventas.
      *
@@ -45,7 +45,7 @@ public class VentaServicio {
         this.ventaRepositorio = ventaRepositorio;
         this.usuarioRepositorio = usuarioRepositorio; 
         this.productoRepositorio = productoRepositorio; 
-        this.entityManager = entityManager; // Inicializa el EntityManager
+        this.entityManager = entityManager; 
 
     }
 
@@ -71,6 +71,9 @@ public class VentaServicio {
         
         // Si la fecha no se proporciona, usar la fecha actual:
         LocalDate fecha = dto.getFecha() != null ? dto.getFecha() : LocalDate.now();
+
+        // Validar la fecha proporcionada
+        FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
     
         // 1. Calcular rango del mes (partición)
         YearMonth yearMonth = YearMonth.from(fecha);
@@ -96,9 +99,9 @@ public class VentaServicio {
         // El total se calculará automáticamente por el trigger en la base de datos
 
         /*
-        * Guardar y forzar sincronización con la BD
-        * es importante usar `saveAndFlush` para asegurarnos de que la operación de guardado se sincronice inmediatamente con la base de datos, 
-        * de modo que el refresh pueda obtener los cambios.
+        * Usamos saveAndFlush para Guardar y forzar sincronización con la BD 
+        * y asegurarnos de que la operación de guardado se sincronice al instante con la base de datos, 
+        * para que el refresh pueda obtener los cambios y poder retornar los cambios actualizados para mostrarlos en el front.
         */
         Venta ventaGuardada = ventaRepositorio.saveAndFlush(venta);
 
@@ -143,7 +146,7 @@ public class VentaServicio {
         // Refrescar después de guardar
         entityManager.refresh(ventaActualizada);
         
-        // Retornar la venta actualizada. Esto asegura que la venta tenga los datos más recientes después de la actualización
+        // Retornar la venta actualizada.
         return ventaActualizada;
     }
 
