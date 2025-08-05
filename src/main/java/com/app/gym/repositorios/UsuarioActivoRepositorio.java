@@ -10,16 +10,12 @@ import com.app.gym.modelos.UsuarioActivo;
  */
 public interface UsuarioActivoRepositorio extends JpaRepository<UsuarioActivo, Integer> {
 
-    /**
-     * Obtiene todos los usuarios cuya membresía está vigente.
-     *
+    /** Obtiene todos los usuarios cuya membresía está vigente.
      * @return lista de UsuarioActivo con membresiaActiva = true
      */
     List<UsuarioActivo> findByMembresiaActivaTrue();
 
-    /**
-     * Obtiene todos los usuarios cuya membresía está vencida.
-     *
+    /** Obtiene todos los usuarios cuya membresía está vencida.
      * @return lista de UsuarioActivo con membresiaActiva = false
      */
     List<UsuarioActivo> findByMembresiaActivaFalse();
