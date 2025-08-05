@@ -1,6 +1,8 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.asistenciaClaseAerobica;
 
 import java.time.LocalDate;
+
+import com.app.gym.dtos.usuario.UsuarioSimpleDTO;
 
 public class AsistenciaClaseAerobicaResponseDTO {
 

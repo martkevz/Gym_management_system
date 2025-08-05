@@ -7,9 +7,8 @@ import java.util.Optional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import com.app.gym.dtos.ProductoSimpleDTO;
-import com.app.gym.dtos.UsuarioSimpleDTO;
-import com.app.gym.dtos.VentaActualizarDto;
+import com.app.gym.dtos.producto.ProductoSimpleDTO;
+import com.app.gym.dtos.usuario.UsuarioSimpleDTO;
 import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
 import com.app.gym.modelos.Producto;
 import com.app.gym.modelos.Usuario;
@@ -21,8 +20,9 @@ import jakarta.persistence.EntityManager;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.gym.dtos.VentaCrearDto;
-import com.app.gym.dtos.VentaResponseDTO;
+import com.app.gym.dtos.venta.VentaActualizarDto;
+import com.app.gym.dtos.venta.VentaCrearDto;
+import com.app.gym.dtos.venta.VentaResponseDTO;
 import com.app.gym.repositorios.UsuarioRepositorio;
 import com.app.gym.repositorios.ProductoRepositorio;
 

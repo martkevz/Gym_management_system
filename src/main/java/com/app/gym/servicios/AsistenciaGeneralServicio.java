@@ -8,11 +8,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.app.gym.dtos.AsistenciaGeneralActualizarDTO;
-import com.app.gym.dtos.AsistenciaGeneralResponseDTO;
-import com.app.gym.dtos.AsistenciaRequestDTO;
-import com.app.gym.dtos.HorarioPorDiaSimpleDTO;
-import com.app.gym.dtos.UsuarioSimpleDTO;
+import com.app.gym.dtos.asistenciaGeneral.AsistenciaGeneralActualizarDTO;
+import com.app.gym.dtos.asistenciaGeneral.AsistenciaGeneralResponseDTO;
+import com.app.gym.dtos.asistenciaGeneral.AsistenciaRequestDTO;
+import com.app.gym.dtos.horarioPorDia.HorarioPorDiaSimpleDTO;
+import com.app.gym.dtos.usuario.UsuarioSimpleDTO;
 import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
 import com.app.gym.modelos.AsistenciaGeneral;
 import com.app.gym.modelos.HorarioPorDia;

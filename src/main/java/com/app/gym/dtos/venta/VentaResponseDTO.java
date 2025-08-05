@@ -1,7 +1,10 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.venta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import com.app.gym.dtos.producto.ProductoSimpleDTO;
+import com.app.gym.dtos.usuario.UsuarioSimpleDTO;
 
 public class VentaResponseDTO {
     

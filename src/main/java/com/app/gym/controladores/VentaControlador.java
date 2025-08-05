@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.gym.dtos.VentaActualizarDto;
-import com.app.gym.dtos.VentaCrearDto;
+import com.app.gym.dtos.venta.VentaActualizarDto;
+import com.app.gym.dtos.venta.VentaCrearDto;
 import com.app.gym.modelos.Venta;
 import com.app.gym.servicios.VentaServicio;
 

@@ -1,4 +1,4 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.producto;
 
 import java.math.BigDecimal;
 

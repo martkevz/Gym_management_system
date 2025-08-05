@@ -1,4 +1,4 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.horarioPorDia;
 
 public class HorarioPorDiaSimpleDTO {
     

@@ -8,12 +8,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.gym.dtos.AsistenciaClaseAerobicaActualizarDTO;
-import com.app.gym.dtos.AsistenciaClaseAerobicaRequestDTO;
-import com.app.gym.dtos.AsistenciaClaseAerobicaResponseDTO;
-import com.app.gym.dtos.ClaseAerobicaSimpleDTO;
-import com.app.gym.dtos.HorarioPorDiaSimpleDTO;
-import com.app.gym.dtos.UsuarioSimpleDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaActualizarDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaRequestDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaResponseDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.ClaseAerobicaSimpleDTO;
+import com.app.gym.dtos.horarioPorDia.HorarioPorDiaSimpleDTO;
+import com.app.gym.dtos.usuario.UsuarioSimpleDTO;
 import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
 import com.app.gym.modelos.AsistenciaClaseAerobica;
 import com.app.gym.modelos.ClaseAerobica;
