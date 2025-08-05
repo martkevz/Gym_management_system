@@ -59,17 +59,13 @@ public class AsistenciaClaseAerobicaServicio {
                                             .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado con ID: " + dto.getIdUsuario()));
 
         //Validar que el usuario tenga una membresía activa. Si la fecha de fin de la membresía es nula o anterior a la fecha actual, se lanza una excepción.
-        if (usuario.getFechaFinMembresia() == null || usuario.getFechaFinMembresia().toLocalDate().isBefore(LocalDate.now())){
-            throw new IllegalStateException("El usuario no tiene una membresía activa");
-        }
+        FechaValidador.validarFechaFinMembresia(usuario.getFechaFinMembresia());
 
         // Si la fecha no se proporciona, usar la fecha actual:
         LocalDate fecha = dto.getFecha() != null ? dto.getFecha() : LocalDate.now();
 
-        // Validar que la fecha sea válida (no futura y dentro de un rango razonable)
-        if(fecha.isAfter(LocalDate.now()) || fecha.getYear() < 2025){
-            throw new IllegalStateException("Ingrese una fecha válida.");
-        }
+        // Validar la fecha proporcionada
+        FechaValidador.validarFecha(fecha);
 
         // Crear la asistencia
         AsistenciaClaseAerobica asistencia = new AsistenciaClaseAerobica();
@@ -93,10 +89,9 @@ public class AsistenciaClaseAerobicaServicio {
         AsistenciaClaseAerobica asistencia = asistenciaClaseAerobicaRepositorio.findById(idAsistencia).orElseThrow(() -> new RecursoNoEncontradoExcepcion("Asistencia no encontrada con ID: " + idAsistencia));
 
             if(dto.getFecha() != null){
-                if(dto.getFecha().isAfter(LocalDate.now()) || dto.getFecha().getYear() < 2025){
-                    throw new IllegalStateException("Ingrese una fecha válida.");
-                }
-                
+
+                // Validar la fecha proporcionada
+                FechaValidador.validarFecha(dto.getFecha()); 
                 asistencia.setFecha(dto.getFecha());
             }
             

@@ -16,11 +16,6 @@ public class ProductoStockBajoServicio {
 
     private final ProductoStockBajoRepositorio repositorio;
 
-    /**
-     * Constructor del servicio que inyecta el repositorio de productos con stock bajo.
-     * 
-     * @param repositorio Repositorio para acceder a los datos de productos con stock bajo.
-     */
     public ProductoStockBajoServicio(ProductoStockBajoRepositorio repositorio) {
         this.repositorio = repositorio;
     }
