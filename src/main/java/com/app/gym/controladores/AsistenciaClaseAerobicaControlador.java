@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.gym.dtos.AsistenciaClaseAerobicaActualizarDTO;
-import com.app.gym.dtos.AsistenciaClaseAerobicaRequestDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaActualizarDTO;
+import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaRequestDTO;
 import com.app.gym.modelos.AsistenciaClaseAerobica;
 import com.app.gym.servicios.AsistenciaClaseAerobicaServicio;
 

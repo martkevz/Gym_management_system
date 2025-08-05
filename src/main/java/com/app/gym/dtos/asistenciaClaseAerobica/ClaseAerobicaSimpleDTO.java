@@ -1,6 +1,8 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.asistenciaClaseAerobica;
 
 import java.time.LocalTime;
+
+import com.app.gym.dtos.horarioPorDia.HorarioPorDiaSimpleDTO;
 
 public class ClaseAerobicaSimpleDTO {
     

@@ -1,4 +1,4 @@
-package com.app.gym.dtos;
+package com.app.gym.dtos.venta;
 
 import java.time.LocalDate;
 
