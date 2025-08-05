@@ -2,6 +2,8 @@ package com.app.gym.servicios;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.app.gym.modelos.UsuarioActivo;
 import com.app.gym.repositorios.UsuarioActivoRepositorio;
 
@@ -22,7 +24,8 @@ public class UsuarioActivoServicio {
      *
      * @return lista completa de UsuarioActivo
      */
-    public List<UsuarioActivo> todos() {
+    @Transactional(readOnly = true)
+    public List<UsuarioActivo> obtenerUsuarios() {
         return repo.findAll();
     }
 
@@ -31,7 +34,8 @@ public class UsuarioActivoServicio {
      *
      * @return lista de usuarios activos
      */
-    public List<UsuarioActivo> activos() {
+    @Transactional(readOnly = true)
+    public List<UsuarioActivo> obtenerUsuariosActivos() {
         return repo.findByMembresiaActivaTrue();
     }
 
@@ -40,7 +44,8 @@ public class UsuarioActivoServicio {
      *
      * @return lista de usuarios vencidos
      */
-    public List<UsuarioActivo> vencidos() {
+    @Transactional(readOnly = true)
+    public List<UsuarioActivo> obtenerUsuariosVencidos() {
         return repo.findByMembresiaActivaFalse();
     }
 }
