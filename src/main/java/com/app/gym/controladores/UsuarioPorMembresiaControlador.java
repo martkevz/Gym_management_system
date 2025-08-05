@@ -17,18 +17,12 @@ public class UsuarioPorMembresiaControlador {
     
     private final UsuarioPorMembresiaServicio servicio;
 
-    /**
-     * Constructor que inyecta el servicio de Usuarios por Membresía.
-     *
-     * @param servicio instancia de UsuarioPorMembresiaServicio
-     */
     public UsuarioPorMembresiaControlador(UsuarioPorMembresiaServicio servicio) {
         this.servicio = servicio;
     }
 
     /**
-     * Endpoint GET /api/usuarios-membresias
-     *
+     * /api/usuarios-membresias
      * @return resumen de usuarios agrupado por membresía
      * Si la lista está vacía, retorna un 404 Not Found.
      * Si hay usuarios, retorna un 200 OK con la lista de usuarios por membresia.

@@ -22,26 +22,20 @@ public interface VentaRepositorio extends JpaRepository<Venta, VentaId> {
     @Query(value = "SELECT COALESCE(MAX(v.id_venta), 0) FROM ventas v WHERE v.fecha BETWEEN :inicio AND :fin", nativeQuery = true)
     Integer findMaxIdVentaByMonth(@Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
     
-    /**
-     * Busca una venta por su ID y fecha.
-     *
+    /** Busca una venta por su ID y fecha.
      * @param IdVenta el ID de la venta
      * @param fecha la fecha de la venta
      * @return un Optional que contiene la venta si se encuentra, o vacío si no
      */
     Optional<Venta> findByIdVentaAndFecha(Integer IdVenta, LocalDate fecha);
     
-    /**
-     * Busca todas las ventas realizadas en una fecha específica.
-     *
+    /** Busca todas las ventas realizadas en una fecha específica.
      * @param fecha la fecha de las ventas
      * @return una lista de ventas realizadas en esa fecha
      */
     List<Venta> findByFecha(LocalDate fecha);
 
-    /**
-     * Busca todas las ventas realizadas en un rango de fechas.
-     *
+    /** Busca todas las ventas realizadas en un rango de fechas.
      * @param inicio la fecha de inicio del rango
      * @param fin la fecha de fin del rango
      * @return una lista de ventas realizadas en el rango de fechas

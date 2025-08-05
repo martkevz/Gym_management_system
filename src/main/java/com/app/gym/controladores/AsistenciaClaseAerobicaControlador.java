@@ -34,23 +34,20 @@ public class AsistenciaClaseAerobicaControlador {
         this.asistenciaClaseAerobicaServicio = asistenciaClaseAerobicaServicio;
     }
     
+    /*-------------------------------------------------------------------------------------
+	 * 1. Registrar asistencia clase aerobica (api/asistencia-clase-aerobica/registrar)
+	 *------------------------------------------------------------------------------------*/
     /**
-     * Registra la asistencia de un usuario a una clase aeróbica.
-     *
      * @param dto DTO con los datos de la asistencia
      * @param br BindingResult para manejar errores de validación
      * @return ResponseEntity con el estado y el DTO de respuesta
      */
-    /*-------------------------------------------------------------------------------------
-	 * 1. Registrar asistencia clase aerobica (api/asistencia-clase-aerobica/registrar)
-	 *------------------------------------------------------------------------------------*/
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarAsistenciaClaseAerobica(@Valid @RequestBody AsistenciaClaseAerobicaRequestDTO dto, BindingResult br){ //@valid valida las notaciones (como @NotNull) del DTO
 	
 		// Verifica si hay errores de validación en el objeto 'br'
 		if(br.hasErrors()){
-				// Si hay errores, los recoge y los convierte en una lista de cadenas formateadas mediante "stream()"
-				List<String> errores = br.getFieldErrors().stream()
+				List<String> errores = br.getFieldErrors().stream() // Si hay errores, los recoge y los convierte en una lista de cadenas formateadas mediante "stream()"
                     .map(e -> e.getField() + ": " + e.getDefaultMessage()) // Mapea cada error a una cadena con el formato "campo: mensaje de error"
                     .toList(); // Convierte el stream en una lista
 					
@@ -65,8 +62,6 @@ public class AsistenciaClaseAerobicaControlador {
 	 * 2. Actualizar asistencia clase aerobica (api/asistencia-clase-aerobica/{id})
 	 *------------------------------------------------------------------------------------*/
     /**
-     * Actualiza una asistencia de clase aeróbica existente.
-     *
      * @param id ID de la asistencia a actualizar
      * @param dto DTO con los datos actualizados
      * @return ResponseEntity con el estado y el DTO de respuesta
@@ -79,11 +74,9 @@ public class AsistenciaClaseAerobicaControlador {
     }
 
     /*-------------------------------------------------------------------------------------
-     * 3. Obtener asistencia clase aerobica por id (api/asistencia-clase-aerobica/{id})
+     * 3. Obtener asistencia clase aerobica por ID (api/asistencia-clase-aerobica/{id})
      *------------------------------------------------------------------------------------*/
     /**
-     * Obtiene una asistencia de clase aeróbica por su ID.
-     *
      * @param id ID de la asistencia a buscar
      * @return ResponseEntity con el estado y el DTO de respuesta o un mensaje de error si no se encuentra
      */
@@ -95,9 +88,9 @@ public class AsistenciaClaseAerobicaControlador {
                                                                         .body(Map.of("mensaje", "No se encontró la asistencia con ID " + id)));
     }
 
-    /*--------------------------------------------------------------------------------------------------------
-     * 4. Buscar asistencias clase aerobica por fecha, mes o rango de fechas (api/asistencia-clase-aerobica)
-     *-------------------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------
+     * 4. Buscar asistencias de clase aerobica por fecha, mes o rango de fechas (api/asistencia-clase-aerobica)
+     *-----------------------------------------------------------------------------------------------------------*/
     /**
      * Busca asistencias de clase aeróbica por fecha.
      *
