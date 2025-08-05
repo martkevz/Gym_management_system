@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.gym.modelos.ProductoStockBajo;
 import com.app.gym.servicios.ProductoStockBajoServicio;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,13 @@ public class ProductoStockBajoControlador {
      * Si hay productos con stock bajo, retorna un 200 OK con la lista.
      */
     @GetMapping
-    public ResponseEntity<List<ProductoStockBajo>> listarProductosStockBajo(){
+    public ResponseEntity<?> listarProductosStockBajo(){
         List<ProductoStockBajo> productos = productoStockBajoServicio.obtenerProductosStockBajo();
 
         if(productos.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "No hay productos con stock bajo"));
         } 
         
         return ResponseEntity.ok(productos);
-        
     }
 }

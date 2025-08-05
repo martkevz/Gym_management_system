@@ -13,10 +13,10 @@ import com.app.gym.servicios.UsuarioActivoServicio;
 @RestController
 @RequestMapping("/api/usuarios-activos")
 public class UsuarioActivoControlador {
-    private final UsuarioActivoServicio svc;
+    private final UsuarioActivoServicio usuarioActivoServicio;
 
-    public UsuarioActivoControlador(UsuarioActivoServicio svc) {
-        this.svc = svc;
+    public UsuarioActivoControlador(UsuarioActivoServicio usuarioActivoServicio) {
+        this.usuarioActivoServicio = usuarioActivoServicio;
     }
 
     /**
@@ -24,8 +24,15 @@ public class UsuarioActivoControlador {
      * @return lista de todos los usuarios activos
      */
     @GetMapping
-    public List<UsuarioActivo> listarTodos() {
-        return svc.todos();
+    public ResponseEntity<?> obtenerUsuarios() {
+
+        List<UsuarioActivo> usuarios = usuarioActivoServicio.obtenerUsuarios();
+
+        if (usuarios.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay usuarios activos registrados.");
+        }
+
+        return ResponseEntity.ok(usuarios);
     }
 
     /**
@@ -35,12 +42,12 @@ public class UsuarioActivoControlador {
      * si hay usuarios activos, retorna un 200 OK con la lista de usuarios activos
      */
     @GetMapping("/activos")
-    public ResponseEntity<List<UsuarioActivo>> listarActivos() {
+    public ResponseEntity<?> obtenerUsuariosActivos() {
 
-        List<UsuarioActivo> activos = svc.activos();
+        List<UsuarioActivo> activos = usuarioActivoServicio.obtenerUsuariosActivos();
 
         if(activos.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);        
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay usuarios con membresía activa.");        
         }
 
         return ResponseEntity.ok(activos);
@@ -53,13 +60,14 @@ public class UsuarioActivoControlador {
      * si hay usuarios vencidos, retorna un 200 OK con la lista
      */
     @GetMapping("/vencidos")
-    public ResponseEntity<List<UsuarioActivo>> listarVencidos() {
+    public ResponseEntity<?> obtenerUsuariosVencidos() {
 
-        List<UsuarioActivo> vencidos = svc.vencidos();
+        List<UsuarioActivo> vencidos = usuarioActivoServicio.obtenerUsuariosVencidos();
 
         if (vencidos.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay usuarios con membresía vencida.");
         }
+        
         return ResponseEntity.ok(vencidos);
     }
 }

@@ -28,11 +28,11 @@ public class UsuarioPorMembresiaControlador {
      * Si hay usuarios, retorna un 200 OK con la lista de usuarios por membresia.
      */
     @GetMapping
-    public ResponseEntity<List<UsuarioPorMembresia>> listarUsuariosPorMembresias (){
+    public ResponseEntity<?> listarUsuariosPorMembresias (){
         List<UsuarioPorMembresia> upm = servicio.obtenerUsuariosPorMembresias();
 
         if(upm.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron usuarios con membresías registradas.");
         }
         return ResponseEntity.ok(upm);
     }
