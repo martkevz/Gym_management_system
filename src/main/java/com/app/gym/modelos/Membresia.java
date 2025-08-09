@@ -1,14 +1,15 @@
 package com.app.gym.modelos;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,8 +37,8 @@ public class Membresia {
     private BigDecimal precio;
 
     //Esta relaciona uno a uno con Usuarios, donde cada usuario puede tener una membresía.
-    @OneToOne(mappedBy = "membresia", cascade = CascadeType.ALL)
-    private Usuario usuario;
+    @OneToMany(mappedBy = "membresia", fetch = FetchType.LAZY) // <<-- Many usuarios
+    private List<Usuario> usuarios;
 
     public Membresia() {
     }
@@ -75,6 +76,14 @@ public class Membresia {
         this.precio = precio;
     }
 
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
     /*  
      *  Métodos adicionales --------------------------------------------------------------------------------------------
      */
@@ -88,5 +97,4 @@ public class Membresia {
                 ", precio=" + precio +
                 '}';
     }
-
 }
