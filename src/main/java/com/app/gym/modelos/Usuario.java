@@ -1,17 +1,18 @@
 package com.app.gym.modelos;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,7 +32,7 @@ public class Usuario {
     
     // Atributo para almacenar la fecha de nacimiento del usuario. En postgresql, será de tipo DATE.
     @Column(name = "fecha_nacimiento")
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @Column(name = "email", unique = true) // Aseguramos que el email sea único en la base de datos
     private String email;
@@ -39,13 +40,17 @@ public class Usuario {
     // Atributo para almacenar la fecha de inicio y fin de la membresía del usuario.
     // En postgresql, será de tipo DATE.
     @Column(name = "fecha_inicio_membresia", nullable = false)
-    private Date fechaInicioMembresia;
+    private LocalDate fechaInicioMembresia;
 
     @Column(name = "fecha_fin_membresia", nullable = false)
-    private Date fechaFinMembresia;
+    private LocalDate fechaFinMembresia;
+
+    // Indica si la venta está anulada (soft-delete)
+    @Column(nullable = false)
+    public Boolean anulada = false; 
 
     // Relación con la entidad Membresia.
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Lazy loading para optimizar rendimiento
     @JoinColumn(name = "id_membresia", referencedColumnName = "id_membresia", nullable = false)
     private Membresia membresia;
 
@@ -85,11 +90,11 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -101,19 +106,19 @@ public class Usuario {
         this.email = email;
     }
 
-    public Date getFechaInicioMembresia() {
+    public LocalDate getFechaInicioMembresia() {
         return fechaInicioMembresia;
     }
 
-    public void setFechaInicioMembresia(Date fechaInicioMembresia) {
+    public void setFechaInicioMembresia(LocalDate fechaInicioMembresia) {
         this.fechaInicioMembresia = fechaInicioMembresia;
     }
 
-    public Date getFechaFinMembresia() {
+    public LocalDate getFechaFinMembresia() {
         return fechaFinMembresia;
     }
 
-    public void setFechaFinMembresia(Date fechaFinMembresia) {
+    public void setFechaFinMembresia(LocalDate fechaFinMembresia) {
         this.fechaFinMembresia = fechaFinMembresia;
     }
 
@@ -141,6 +146,14 @@ public class Usuario {
         this.asistenciaGeneral = asistenciaGeneral;
     }
 
+    public Boolean getAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(Boolean anulada) {
+        this.anulada = anulada;
+    }
+
     // Método toString para facilitar la visualización de los datos
     @Override
     public String toString() {
@@ -152,6 +165,7 @@ public class Usuario {
             ", fechaNacimiento=" + fechaNacimiento +
             ", fechaInicioMembresia=" + fechaInicioMembresia +
             ", fechaFinMembresia=" + fechaFinMembresia +
+            ", anulada=" + anulada +
             ", membresia=" + (membresia != null ? membresia.getNombre() : "Sin membresía") + 
             '}';
 }

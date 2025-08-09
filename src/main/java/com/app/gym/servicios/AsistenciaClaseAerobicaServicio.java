@@ -41,7 +41,6 @@ public class AsistenciaClaseAerobicaServicio {
     // ------------------------------------------------------------------
     // Operaciones de creación
     // ------------------------------------------------------------------
-    
     /**
      * Registra la asistencia de un usuario a una clase aeróbica.
      *
@@ -110,7 +109,7 @@ public class AsistenciaClaseAerobicaServicio {
             if(dto.getIdUsuario() != null){
                 Usuario usuario = usuarioRepositorio.findById(dto.getIdUsuario()).orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrada con el ID: " + dto.getIdUsuario()));
             
-                if(usuario.getFechaFinMembresia() == null || usuario.getFechaFinMembresia().toLocalDate().isBefore(LocalDate.now())){
+                if(usuario.getFechaFinMembresia() == null || usuario.getFechaFinMembresia().isBefore(LocalDate.now())){
                     throw new IllegalStateException("El usuario no tiene una membresía activa");
                 }
                 
@@ -123,7 +122,6 @@ public class AsistenciaClaseAerobicaServicio {
     // ------------------------------------------------------------------
     // Operaciones de consulta
     // ------------------------------------------------------------------
-
     /**
      * Obtiene una asistencia de clase aeróbica por su ID.
      *
@@ -178,8 +176,6 @@ public class AsistenciaClaseAerobicaServicio {
 
         return asistenciaClaseAerobicaRepositorio.findByRangoFechas(inicio, fin);
     }
-
-    
 
     /**
      * Este método transforma una entidad AsistenciaClaseAerobica en un DTO AsistenciaClaseAerobicaResponseDTO

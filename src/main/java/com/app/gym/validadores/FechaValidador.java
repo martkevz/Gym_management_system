@@ -1,6 +1,5 @@
 package com.app.gym.validadores;
 
-import java.sql.Date;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -69,10 +68,23 @@ public class FechaValidador {
      * @param fechaFinMembresia la fecha de fin de la membresía del usuario
      * @throws IllegalStateException si la membresía no está activa
      */
-    public static void validarFechaFinMembresia(Date fechaFinMembresia){
+    public static void validarFechaFinMembresia(LocalDate fechaFinMembresia){
 
-        if (fechaFinMembresia == null || fechaFinMembresia.toLocalDate().isBefore(LocalDate.now())){
+        if (fechaFinMembresia == null || fechaFinMembresia.isBefore(LocalDate.now())){
             throw new IllegalStateException("El usuario no tiene una membresía activa");
+        }
+    }
+
+    /**
+     * Valida que la fecha de nacimiento del usuario sea válida.
+     * La fecha de nacimiento no puede ser futura o nula.
+     *
+     * @param fechaNacimiento la fecha de nacimiento del usuario
+     * @throws FechaInvalidaExcepcion si la fecha de nacimiento es inválida
+     */
+    public static void validarFechaNacimiento(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null || fechaNacimiento.isAfter(LocalDate.now()) || fechaNacimiento.getYear() < 1900) {
+            throw new FechaInvalidaExcepcion("La fecha de nacimiento no puede ser futura o nula y debe estar en un rango válido.");
         }
     }
 }
