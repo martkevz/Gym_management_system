@@ -2,31 +2,22 @@ package com.app.gym.dtos.usuario;
 
 import java.time.LocalDate;
 
-import com.app.gym.dtos.membresia.MembresiaSimpleDTO;
-
 import jakarta.validation.constraints.Email;
 
-public class UsuarioResponseDTO {
+public class UsuarioActualizarDTO {
 
-    private Integer idUsuario;
     private String nombre;
     private String apellido;
-    private LocalDate fechaNacimiento;
+    private String fechaNacimiento;
 
     @Email(message = "El email debe ser válido")
     private String email;
-    
-    private LocalDate fechaInicioMembresia;
-    private LocalDate fechaFinMembresia;
-    private MembresiaSimpleDTO membresia;
-    private Boolean anulada;
 
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    private LocalDate fechaInicioMembresia;
+    public Boolean anulada; 
+    private Integer membresia;
+
+    // Getters y Setters
     public String getNombre() {
         return nombre;
     }
@@ -39,10 +30,10 @@ public class UsuarioResponseDTO {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-    public LocalDate getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
     public String getEmail() {
@@ -57,22 +48,16 @@ public class UsuarioResponseDTO {
     public void setFechaInicioMembresia(LocalDate fechaInicioMembresia) {
         this.fechaInicioMembresia = fechaInicioMembresia;
     }
-    public LocalDate getFechaFinMembresia() {
-        return fechaFinMembresia;
-    }
-    public void setFechaFinMembresia(LocalDate fechaFinMembresia) {
-        this.fechaFinMembresia = fechaFinMembresia;
-    }
-    public MembresiaSimpleDTO getMembresia() {
-        return membresia;
-    }
-    public void setMembresia(MembresiaSimpleDTO membresia) {
-        this.membresia = membresia;
-    }
     public Boolean getAnulada() {
         return anulada;
     }
     public void setAnulada(Boolean anulada) {
         this.anulada = anulada;
+    }
+    public Integer getMembresia() {
+        return membresia;
+    }
+    public void setMembresia(Integer membresia) {
+        this.membresia = membresia;
     }
 }

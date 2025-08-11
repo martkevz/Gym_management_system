@@ -1,14 +1,18 @@
 package com.app.gym.servicios;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.gym.dtos.membresia.MembresiaSimpleDTO;
+import com.app.gym.dtos.usuario.UsuarioActualizarDTO;
 import com.app.gym.dtos.usuario.UsuarioRequestDTO;
 import com.app.gym.dtos.usuario.UsuarioResponseDTO;
+import com.app.gym.excepciones.RecursoNoEncontradoExcepcion;
+import com.app.gym.mappers.UsuarioMapper;
 import com.app.gym.modelos.Membresia;
 import com.app.gym.modelos.Usuario;
 import com.app.gym.repositorios.MembresiaRepositorio;
@@ -22,17 +26,24 @@ public class UsuarioServicio {
     
     UsuarioRepositorio usuarioRepositorio;
     MembresiaRepositorio membresiaRepositorio;
+    UsuarioMapper usuarioMapper;
     EntityManager entityManager;
 
-    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, MembresiaRepositorio membresiaRepositorio, EntityManager entityManager) {
+    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, MembresiaRepositorio membresiaRepositorio, EntityManager entityManager, UsuarioMapper usuarioMapper) {
         this.usuarioRepositorio = usuarioRepositorio;
         this.membresiaRepositorio = membresiaRepositorio;
         this.entityManager = entityManager;
+        this.usuarioMapper = usuarioMapper;
     }
     // ------------------------------------------------------------------
     // Operaciones de creación
     // ------------------------------------------------------------------
-
+    
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * @param dto El DTO que contiene los datos del usuario a registrar.    
+     * @return El usuario registrado.
+     */
     @Transactional
     public Usuario registrarUsuario(UsuarioRequestDTO dto){
 
@@ -60,6 +71,75 @@ public class UsuarioServicio {
         entityManager.refresh(usuarioActualizado);
 
         return usuarioActualizado;
+    }
+
+    // ------------------------------------------------------------------
+    // Operaciones de actualización
+    // ------------------------------------------------------------------
+    
+    /**
+     * Actualiza un usuario existente en el sistema.
+     * @param id el ID del usuario a actualizar.
+     * @param dto el DTO que contiene los nuevos datos del usuario.
+     * @return El usuario actualizado.
+    */
+    @Transactional
+    public Usuario actualizarUsuario(Integer id, UsuarioActualizarDTO dto){
+        Usuario usuario = usuarioRepositorio.findById(id).orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado"));
+
+        usuarioMapper.updateFromDto(dto, usuario, entityManager);
+
+        Usuario usuarioActualizado = usuarioRepositorio.saveAndFlush(usuario);
+        entityManager.refresh(usuarioActualizado);
+
+        return usuarioActualizado;
+    }
+
+    // ------------------------------------------------------------------
+    // Métodos de consulta
+    // ------------------------------------------------------------------
+
+    /**
+     * Busca un usuario por su ID.
+     * @param id el ID del usuario a buscar.    
+     * @return El usuario encontrado. Y si el usuario no se encuentra con el ID proporcionado.
+     */
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(Integer id){
+        return usuarioRepositorio.findByIdUsuario(id)
+                                .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado con id: " + id));
+    }
+
+    /**
+     * Busca un usuario por su email.
+     * @param email el email del usuario a buscar.    
+     * @return El usuario encontrado. Y si el usuario no se encuentra con el email proporcionado.
+     */
+    @Transactional(readOnly = true)
+    public Usuario buscarPorEmail(String email){
+        return usuarioRepositorio.findByEmail(email)
+                                .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado con email: " + email));
+    }
+
+    /**
+     * Busca todos los usuarios cuya membresía está por vencer en los próximos 7 días.
+     * @return Una lista de usuarios con membresía por vencer.
+     */
+    @Transactional(readOnly = true)
+    public List<Usuario> usuariosPorVencerEnUnaSemana(){
+
+        // Definir el rango de fechas para buscar usuarios con membresía por vencer
+        LocalDate inicio = LocalDate.now();
+        LocalDate fin = inicio.plusDays(7);
+        
+        List<Usuario> usuarios = usuarioRepositorio.findUsuariosPorVencer(inicio, fin);
+
+        // Si no se encuentran usuarios, devolver una lista vacía
+        if(usuarios == null || usuarios.isEmpty()){
+            return Collections.emptyList(); 
+        }
+
+        return usuarios;
     }
 
     /**

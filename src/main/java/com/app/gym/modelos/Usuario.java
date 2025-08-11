@@ -47,7 +47,7 @@ public class Usuario {
 
     // Indica si la venta está anulada (soft-delete)
     @Column(nullable = false)
-    public Boolean anulada = false; 
+    private Boolean anulada = false; 
 
     // Relación con la entidad Membresia.
     @ManyToOne(fetch = FetchType.LAZY) // Lazy loading para optimizar rendimiento

@@ -1,6 +1,6 @@
 package com.app.gym.repositorios;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,17 +24,10 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
      */
     Optional<Usuario> findByEmail(String email);
     
-    /** Para búsquedas parciales por nombre o apellido
-     * @param nombre el nombre del usuario
-     * @param apellido el apellido del usuario
-     * @return un Optional que contiene el usuario si se encuentra, o vacío si no
-     */
-    List<Usuario> findByNombreIgnoreCaseContainingOrApellidoIgnoreCaseContaining(String nombre, String apellido);
-
     /** Busca todos los usuarios cuya membresía está por vencer en los próximos 7 días.
      * @return una lista de usuarios con membresía por vencer
      */
     @Query("SELECT u FROM Usuario u WHERE u.fechaFinMembresia BETWEEN :inicio AND :fin")
-    List<Usuario> findUsuariosPorVencer(@Param("inicio") Date inicio, @Param("fin") Date fin);
+    List<Usuario> findUsuariosPorVencer(@Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
 }
 
