@@ -163,6 +163,7 @@ public class VentaServicio {
      */
     @Transactional(readOnly = true)
     public Optional<Venta> buscarPorIdFecha(Integer id, LocalDate fecha){
+        FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
         return ventaRepositorio.findByIdVentaAndFecha(id, fecha);
     } 
 
