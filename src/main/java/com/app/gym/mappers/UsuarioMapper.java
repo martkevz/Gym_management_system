@@ -16,7 +16,12 @@ import jakarta.persistence.EntityManager;
 public interface UsuarioMapper {
     
     // Mapea los campos no nulos del DTO sobre la entidad existente
-    @Mapping(source = "membresia", target = "membresia" )
+
+    @Mapping(target = "idUsuario", ignore = true)
+    @Mapping(target = "fechaFinMembresia", ignore = true)
+    @Mapping(target = "venta", ignore = true)
+    @Mapping(target = "asistenciaGeneral", ignore = true)  
+    @Mapping(source = "membresia", target = "membresia" ) 
     void updateFromDto(UsuarioActualizarDTO dto, @MappingTarget Usuario usuario, @Context EntityManager em); // si el DTO tiene un campo nulo, no lo actualiza 
 
     // Helper para mapear desde Integer -> Membresia
