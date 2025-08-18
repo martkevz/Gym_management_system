@@ -97,6 +97,6 @@ public class UsuarioControlador {
     public ResponseEntity<?> buscarUsuariosPorVencerEnUnaSemana() {
 
         List<Usuario> usuarios = usuarioServicio.usuariosPorVencerEnUnaSemana();
-        return ListUtils.okMappedList(usuarios, usuarioServicio::toResponseDTO);
+        return ListUtils.okMappedList(usuarios, usuarioServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
     }
 }

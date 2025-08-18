@@ -14,6 +14,7 @@ import com.app.gym.modelos.Producto;
 import com.app.gym.modelos.Usuario;
 import com.app.gym.modelos.Venta;
 import com.app.gym.repositorios.VentaRepositorio;
+import com.app.gym.utils.ListUtils;
 import com.app.gym.validadores.FechaValidador;
 
 import jakarta.persistence.EntityManager;
@@ -162,9 +163,9 @@ public class VentaServicio {
      * @return un Optional que contiene la venta si se encuentra, o vacío si no
      */
     @Transactional(readOnly = true)
-    public Optional<Venta> buscarPorIdFecha(Integer id, LocalDate fecha){
+    public Venta buscarPorIdFecha(Integer id, LocalDate fecha){
         FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
-        return ventaRepositorio.findByIdVentaAndFecha(id, fecha);
+        return ventaRepositorio.findByIdVentaAndFecha(id, fecha).orElseThrow(()-> new RecursoNoEncontradoExcepcion("Venta no encontrada con ID: " + id + " y fecha: " + fecha));
     } 
 
     /**
@@ -175,8 +176,9 @@ public class VentaServicio {
      */
     @Transactional(readOnly = true)
     public List<Venta> buscarPorFecha (LocalDate fecha){
+
         FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
-        return ventaRepositorio.findByFecha(fecha);
+        return ListUtils.emptyIfNull(ventaRepositorio.findByFecha(fecha));
     }
 
     /**
@@ -192,7 +194,7 @@ public class VentaServicio {
         FechaValidador.validarYearMonth(year, month); // Validar el año y mes proporcionados
         YearMonth ym = YearMonth.of(year, month);
 
-        return ventaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
+        return ListUtils.emptyIfNull(ventaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth()));
     }
     
     /**
@@ -205,9 +207,8 @@ public class VentaServicio {
     @Transactional(readOnly = true)
     public List<Venta> buscarPorRangoFechas(LocalDate inicio, LocalDate fin){
 
-        FechaValidador.validarRangoFechas(inicio, fin); 
-        
-        return ventaRepositorio.findByRangoFechas(inicio, fin);
+        FechaValidador.validarRangoFechas(inicio, fin);   
+        return ListUtils.emptyIfNull(ventaRepositorio.findByRangoFechas(inicio, fin)); // Retorna una lista vacía si no hay ventas en el rango
     }
 
     /**
