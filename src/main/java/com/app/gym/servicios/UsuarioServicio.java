@@ -17,6 +17,7 @@ import com.app.gym.modelos.Membresia;
 import com.app.gym.modelos.Usuario;
 import com.app.gym.repositorios.MembresiaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
+import com.app.gym.utils.ListUtils;
 import com.app.gym.validadores.FechaValidador;
 
 import jakarta.persistence.EntityManager;
@@ -135,11 +136,7 @@ public class UsuarioServicio {
         List<Usuario> usuarios = usuarioRepositorio.findUsuariosPorVencer(inicio, fin);
 
         // Si no se encuentran usuarios, devolver una lista vacía
-        if(usuarios == null || usuarios.isEmpty()){
-            return Collections.emptyList(); 
-        }
-
-        return usuarios;
+        return ListUtils.emptyIfNull(usuarios);
     }
 
     /**

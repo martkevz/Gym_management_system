@@ -17,6 +17,7 @@ import com.app.gym.dtos.usuario.UsuarioActualizarDTO;
 import com.app.gym.dtos.usuario.UsuarioRequestDTO;
 import com.app.gym.modelos.Usuario;
 import com.app.gym.servicios.UsuarioServicio;
+import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,6 +97,6 @@ public class UsuarioControlador {
     public ResponseEntity<?> buscarUsuariosPorVencerEnUnaSemana() {
 
         List<Usuario> usuarios = usuarioServicio.usuariosPorVencerEnUnaSemana();
-        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarios));
+        return ListUtils.okMappedList(usuarios, usuarioServicio::toResponseDTO);
     }
 }
