@@ -21,6 +21,7 @@ import com.app.gym.dtos.venta.VentaActualizarDto;
 import com.app.gym.dtos.venta.VentaCrearDto;
 import com.app.gym.modelos.Venta;
 import com.app.gym.servicios.VentaServicio;
+import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -96,9 +97,8 @@ public class VentaControlador {
     @GetMapping("/{id}/{fecha}") 
 	public ResponseEntity<?> buscarVentaPorIdFecha(@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 			
-        return ventaServicio.buscarPorIdFecha(id, fecha).<ResponseEntity<?>>map(v -> ResponseEntity.ok(ventaServicio.toResponseDTO(v)))
-                                                                            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                                                            .body(Map.of("mensaje", "Venta no encontrada")));
+        Venta venta = ventaServicio.buscarPorIdFecha(id, fecha);
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(venta)); 
 	}
 
     /*--------------------------------------------------------------------------------------------------
@@ -112,11 +112,7 @@ public class VentaControlador {
     public ResponseEntity<?> buscarVentasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 
 		List<Venta> ventas = ventaServicio.buscarPorFecha(fecha);
-		
-		if(ventas.isEmpty()){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Venta no encontrada en la fecha proporcionada"));
-		}
-			return ResponseEntity.ok(ventaServicio.toResponseDTO(ventas));
+		return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
     }
 
     /*-----------------------------------------------------------------------------------------------
@@ -131,12 +127,7 @@ public class VentaControlador {
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
 
         List<Venta> ventas = ventaServicio.buscarPorMes(anio, mes); 
-
-        if(ventas.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Sin ventas para el período indicado"));
-        }
-
-        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventas));
+        return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO);
     }
 
     /*----------------------------------------------------------------------------------------------------------------
@@ -152,11 +143,6 @@ public class VentaControlador {
 												@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin){
 
         List<Venta> ventas = ventaServicio.buscarPorRangoFechas(inicio, fin);
-        
-        if(ventas.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "No hay ventas en el rango de fecha proporcionado."));
-        }
-        
-        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventas));
+        return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
     }
 }
