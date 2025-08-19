@@ -3,7 +3,6 @@ package com.app.gym.servicios;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +20,7 @@ import com.app.gym.modelos.Usuario;
 import com.app.gym.repositorios.AsistenciaClaseAerobicaRepositorio;
 import com.app.gym.repositorios.ClaseAerobicaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
+import com.app.gym.utils.ListUtils;
 import com.app.gym.validadores.FechaValidador;
 
 @Service
@@ -31,7 +31,7 @@ public class AsistenciaClaseAerobicaServicio {
     UsuarioRepositorio usuarioRepositorio;
 
     public AsistenciaClaseAerobicaServicio(AsistenciaClaseAerobicaRepositorio asistenciaClaseAerobicaRepositorio,
-                                            ClaseAerobicaRepositorio claseAerobicaRepositorio,
+                                            ClaseAerobicaRepositorio claseAerobicaRepositorio, 
                                             UsuarioRepositorio usuarioRepositorio) {
         this.asistenciaClaseAerobicaRepositorio = asistenciaClaseAerobicaRepositorio;
         this.claseAerobicaRepositorio = claseAerobicaRepositorio;
@@ -129,8 +129,9 @@ public class AsistenciaClaseAerobicaServicio {
      * @return Un Optional que contiene la asistencia si se encuentra, o vacío si no
      */
     @Transactional(readOnly = true)
-    public Optional<AsistenciaClaseAerobica> obtenerAsistenciaPorId(Integer idAsistencia){
-        return asistenciaClaseAerobicaRepositorio.findByidAsistenciaClaseAerobica(idAsistencia);
+    public AsistenciaClaseAerobica obtenerAsistenciaPorId(Integer idAsistencia){
+        return asistenciaClaseAerobicaRepositorio.findByidAsistenciaClaseAerobica(idAsistencia)
+                                                    .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Asistencia no encontrada con ID: " + idAsistencia));
     }
 
     /**
@@ -143,7 +144,8 @@ public class AsistenciaClaseAerobicaServicio {
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorFecha(LocalDate fecha){
 
         FechaValidador.validarFecha(fecha); // Validar que la fecha no sea futura y esté dentro de un rango razonable
-        return asistenciaClaseAerobicaRepositorio.findByFecha(fecha);
+        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByFecha(fecha);
+        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
     /**
@@ -158,8 +160,8 @@ public class AsistenciaClaseAerobicaServicio {
 
         FechaValidador.validarYearMonth(anio, mes); // Validar que el año y mes sean válidos
         YearMonth ym = YearMonth.of(anio, mes);
-
-        return asistenciaClaseAerobicaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
+        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
+        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
     /**
@@ -173,8 +175,8 @@ public class AsistenciaClaseAerobicaServicio {
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorRangoFechas(LocalDate inicio, LocalDate fin){
 
         FechaValidador.validarRangoFechas(inicio, fin); // Validar que el rango de fechas sea correcto
-
-        return asistenciaClaseAerobicaRepositorio.findByRangoFechas(inicio, fin);
+        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByRangoFechas(inicio, fin);
+        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
     /**

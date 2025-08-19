@@ -21,6 +21,7 @@ import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaActualiza
 import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaRequestDTO;
 import com.app.gym.modelos.AsistenciaClaseAerobica;
 import com.app.gym.servicios.AsistenciaClaseAerobicaServicio;
+import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -82,10 +83,8 @@ public class AsistenciaClaseAerobicaControlador {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAsistenciaPorId(@PathVariable Integer id) {
-
-        return asistenciaClaseAerobicaServicio.obtenerAsistenciaPorId(id).<ResponseEntity<?>>map(a -> ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(a)))
-                                                                        .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                                                        .body(Map.of("mensaje", "No se encontró la asistencia con ID " + id)));
+        AsistenciaClaseAerobica asistencia = asistenciaClaseAerobicaServicio.obtenerAsistenciaPorId(id);
+        return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistencia));
     }
 
     /*------------------------------------------------------------------------------------------------------------
@@ -101,13 +100,7 @@ public class AsistenciaClaseAerobicaControlador {
     public ResponseEntity<?> buscarAsistenciasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
             // Buscar las ventas por fecha
             List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorFecha(fecha);
-            
-            // Si no se encuentran asistencias, retornar un mensaje de error
-            if(asistencias.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Asistencia no encontrada en la fecha proporcionada"));
-            }
-            
-            return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistencias));
+            return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO); 
     }
 
     /**
@@ -118,14 +111,8 @@ public class AsistenciaClaseAerobicaControlador {
      */
     @GetMapping(params = {"anio", "mes"})
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
-
         List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorMes(anio, mes);
-        
-        if(asistencias.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Asistencia no encontrada en la fecha proporcionada"));
-        }
-        
-        return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistencias));
+        return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO);
     }
 
     /**
@@ -138,13 +125,8 @@ public class AsistenciaClaseAerobicaControlador {
     @GetMapping(params = {"inicio", "fin"})
     public ResponseEntity<?> buscarPorRangoFechas(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio, 
                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin){
-        
+    
         List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorRangoFechas(inicio, fin);
-        
-        if(asistencias.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Asistencia no encontrada en el rango de fecha proporcionado"));
-        }
-        
-        return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistencias));
+        return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de asistencias a DTOs
     }
 }
