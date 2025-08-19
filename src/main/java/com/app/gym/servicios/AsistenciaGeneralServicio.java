@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,7 @@ import com.app.gym.modelos.Usuario;
 import com.app.gym.repositorios.AsistenciaGeneralRepositorio;
 import com.app.gym.repositorios.HorarioPorDiaRepositorio;
 import com.app.gym.repositorios.UsuarioRepositorio;
+import com.app.gym.utils.ListUtils;
 import com.app.gym.validadores.FechaValidador;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -141,8 +141,9 @@ public class AsistenciaGeneralServicio {
      * @return un Optional que contiene la asistencia si se encuentra, o vacío si no
      */
     @Transactional(readOnly = true)
-    public Optional<AsistenciaGeneral> buscarPorIdFecha (Integer idAsistencia, LocalDate fecha){
-        return asistenciaGeneralRepositorio.findByIdAsistenciaAndFecha(idAsistencia, fecha);
+    public AsistenciaGeneral buscarPorIdFecha (Integer idAsistencia, LocalDate fecha){
+        return asistenciaGeneralRepositorio.findByIdAsistenciaAndFecha(idAsistencia, fecha)
+                                            .orElseThrow(() -> new RecursoNoEncontradoExcepcion("No se ha encontrado una asistencia con el id '" + idAsistencia + "' en la fecha: '" + fecha +"'."));
     }
 
     /**
@@ -155,8 +156,7 @@ public class AsistenciaGeneralServicio {
     public List<AsistenciaGeneral> buscarPorFecha(LocalDate fecha){
 
         FechaValidador.validarFecha(fecha); // Validar que la fecha esté dentro del rango permitido
-
-        return asistenciaGeneralRepositorio.findByFecha(fecha);
+        return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByFecha(fecha));
     }
 
     /**
@@ -170,7 +170,7 @@ public class AsistenciaGeneralServicio {
     public List<AsistenciaGeneral> buscarPorMes(int year, int month){
         FechaValidador.validarYearMonth(year, month); // Validar que el año y mes estén dentro del rango permitido
         YearMonth ym = YearMonth.of(year, month);
-        return asistenciaGeneralRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
+        return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth()));
     }
 
     /**
@@ -183,7 +183,7 @@ public class AsistenciaGeneralServicio {
     @Transactional(readOnly = true)
     public List<AsistenciaGeneral> buscarPorRangoFechas(LocalDate inicio, LocalDate fin){
         FechaValidador.validarRangoFechas(inicio, fin); // Validar que el rango de fechas sea correcto
-        return asistenciaGeneralRepositorio.findByRangoFechas(inicio, fin);
+        return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByRangoFechas(inicio, fin));
     }
 
     // ------------------------------------------------------------------ 
