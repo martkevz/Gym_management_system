@@ -21,6 +21,7 @@ import com.app.gym.dtos.asistenciaGeneral.AsistenciaGeneralActualizarDTO;
 import com.app.gym.dtos.asistenciaGeneral.AsistenciaRequestDTO;
 import com.app.gym.modelos.AsistenciaGeneral;
 import com.app.gym.servicios.AsistenciaGeneralServicio;
+import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -88,9 +89,8 @@ public class AsistenciaGeneralControlador {
     @GetMapping("/{id}/{fecha}")
     public ResponseEntity<?> buscarPorIdFecha (@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 
-	return asistenciaGeneralServicio.buscarPorIdFecha(id, fecha).<ResponseEntity<?>>map(a -> ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(a)))
-                                                                                            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                                                                            .body(Map.of("mensaje", "No se ha encontrado una asistencia con el id '" + id + "' en la fecha: '" + fecha +"'.")));
+    AsistenciaGeneral asistencia = asistenciaGeneralServicio.buscarPorIdFecha(id, fecha);
+	return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencia));
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------
@@ -104,12 +104,7 @@ public class AsistenciaGeneralControlador {
     public ResponseEntity<?> buscarAsistenciasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
         
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorFecha(fecha);
-        
-        if(asistencias.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Asistencia no encontrada en la fecha proporcionada"));
-        }
-        
-        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencias));	
+        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);	
     }
 
     /**---------------------------------------------------------------------------------------------------------------------------
@@ -124,12 +119,7 @@ public class AsistenciaGeneralControlador {
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
         
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorMes(anio, mes);
-        
-        if(asistencias.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "Sin asistencias para el período indicado"));
-        }
-        
-        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencias));
+        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);
     }
 
     /**-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -145,12 +135,7 @@ public class AsistenciaGeneralControlador {
                                                     @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate fin){
 
         List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorRangoFechas(inicio, fin);
-        
-        if(asistencias.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "No hay asistencias en el rango de fecha proporcionado."));
-        }
-        
-        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencias));
+        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);
     }
 
 }

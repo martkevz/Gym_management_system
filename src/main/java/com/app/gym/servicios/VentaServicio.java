@@ -3,7 +3,6 @@ package com.app.gym.servicios;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
