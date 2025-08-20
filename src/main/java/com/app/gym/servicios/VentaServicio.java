@@ -130,13 +130,29 @@ public class VentaServicio {
         Venta venta = ventaRepositorio.findByIdVentaAndFecha(idVenta, fecha)
                                     .orElseThrow(() -> new RecursoNoEncontradoExcepcion
                                     ("Venta no encontrada con ID: " + idVenta + " y fecha: " + fecha));
+        
+        if(dto.getFecha() != null && !dto.getFecha().equals(fecha)) {
+            throw new IllegalStateException("No se puede modificar la fecha de una asistencia.");
+        }
 
-        //Actualizar los campos de la venta con los datos del DTO y el trigger va a recalculará total
-        venta.setCantidad(dto.getCantidad());
+        if(dto.getCantidad() != null) {
+            venta.setCantidad(dto.getCantidad());
+        }
 
-        // Si el DTO indica que la venta está anulada, se actualiza el estado de la venta
-        if (Boolean.TRUE.equals(dto.getAnulada())){
-            venta.setAnulada(true);;
+        if(dto.getAnulada() != null) {
+            venta.setAnulada(dto.getAnulada());
+        }
+
+        if(dto.getUsuario() != null) {
+            Usuario usuario = usuarioRepositorio.findById(dto.getUsuario())
+                                                .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado con ID: " + dto.getUsuario()));
+            venta.setUsuario(usuario);
+        }
+
+        if(dto.getProducto() != null) {
+            Producto producto = productoRepositorio.findById(dto.getProducto())
+                                                    .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Producto no encontrado con ID: " + dto.getProducto()));
+            venta.setProducto(producto);
         }
         
         // Guardar y forzar sincronización con la base de datos para asegurarnos de que los cambios se reflejen inmediatamente
