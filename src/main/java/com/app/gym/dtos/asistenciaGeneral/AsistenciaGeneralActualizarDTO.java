@@ -1,35 +1,40 @@
 package com.app.gym.dtos.asistenciaGeneral;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class AsistenciaGeneralActualizarDTO {
 
     /*
-     * DTO para actualizar la asistencia general de un usuario a una clase aeróbica.
-     * Contiene los campos necesarios para modificar la hora de entrada y el estado de anulación de la asistencia.
-     * Este DTO se utiliza para realizar actualizaciones (updates) en la asistencia registrada.
+     * DTO para actualizar la asistencia general de un usuario.
+     * Contiene todos los campos necesarios a modificar de una asistencia general.
      */
 
+    private LocalDate fecha;
     private LocalTime horaEntrada;
+    private boolean anulada; // Marca la asistencia como anulada (soft-delete) que por defecto el false
+    private Integer horarioPorDia;
+    private Integer usuario;
 
-    /** Marca la asistencia como anulada (soft-delete) que por defecto el false*/
-    private boolean anulada;
-
-    // Getters y Setters
+    // Getters 
 
     public LocalTime getHoraEntrada() {
         return horaEntrada;
     }
 
-    public void setHoraEntrada(LocalTime horaEntrada) {
-        this.horaEntrada = horaEntrada;
-    }
-
-    public boolean getAnulada() {
+    public Boolean getAnulada() {
         return anulada;
     }
 
-    public void setAnulada(boolean anulada) {
-        this.anulada = anulada;
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public Integer getHorarioPorDia() {
+        return horarioPorDia;
+    }
+
+    public Integer getUsuario() {
+        return usuario;
     }
 }
