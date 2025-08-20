@@ -103,11 +103,11 @@ public class AsistenciaGeneralServicio {
     // ------------------------------------------------------------------
 
     /**
-     * Actualiza una asistencia general existente.
+     * Actualiza una asistencia general.
      *
      * @param idAsistencia el ID de la asistencia a actualizar
      * @param fecha la fecha de la asistencia a actualizar
-     * @param dto los nuevos datos de la asistencia
+     * @param dto los datos de la asistencia a actualizar
      * @return la asistencia actualizada
      */
     @Transactional
@@ -117,12 +117,29 @@ public class AsistenciaGeneralServicio {
                                                                     .orElseThrow(() -> new RecursoNoEncontradoExcepcion
                                                                     ("Asistencia no encontrada con ID: " + idAsistencia + " y fecha: " + fecha));
 
-        //Actualizar los campos de la venta con los datos del DTO y el trigger va a recalculará total
-        asistencia.setHoraEntrada(dto.getHoraEntrada());
+        if(dto.getFecha() != null && !dto.getFecha().equals(fecha)) {
+        throw new IllegalStateException("No se puede modificar la fecha de una asistencia");
+        }   
+
+        if(dto.getHoraEntrada() != null){
+            asistencia.setHoraEntrada(dto.getHoraEntrada()); // Actualizar la hora de entrada
+        }
 
         // Si el DTO indica que la asistencia está anulada, se actualiza el estado de la asistencia
-        if(Boolean.TRUE.equals(dto.getAnulada())){
+        if(dto.getAnulada() != null){
             asistencia.setAnulada(dto.getAnulada());
+        }
+
+        if(dto.getHorarioPorDia() != null){
+            HorarioPorDia horario = horarioRepositorio.findById(dto.getHorarioPorDia())
+                                                        .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Horario no encontrado con ID: " + dto.getHorarioPorDia()));
+            asistencia.setHorarioPorDia(horario); // Actualizar el horario de la asistencia
+        }
+
+        if(dto.getUsuario() != null){
+            Usuario usuario = usuarioRepositorio.findById(dto.getUsuario())
+                                                .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Usuario no encontrado con ID: " + dto.getUsuario()));
+            asistencia.setUsuario(usuario); // Actualizar el usuario de la asistencia
         }
 
         // Retornar la asistencia.
