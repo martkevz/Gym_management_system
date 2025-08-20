@@ -1,7 +1,8 @@
 package com.app.gym.dtos.venta;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO usado para actualizar una venta:
@@ -10,27 +11,31 @@ import jakarta.validation.constraints.NotNull;
  */
 public class VentaActualizarDto {
 
-    @NotNull(message = "La cantidad es obligatoria")
+    private LocalDate fecha;
     @Min(value = 1, message = "La cantidad debe ser al menos 1")
     private Integer cantidad;
+    public Boolean anulada = false;  // Marca la venta como anulada (soft-delete) que por defecto el false
+    private Integer usuario; //Relación con usuario y producto
+    private Integer producto; // Relación con usuario y producto
 
-    /** Marca la venta como anulada (soft-delete) que por defecto el false*/
-    private Boolean anulada;
+    //Getters 
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-    //Getters y Setters
     public Integer getCantidad() {
         return cantidad;
     }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
+    
     public Boolean getAnulada() {
         return anulada;
     }
+    
+    public Integer getUsuario() {
+        return usuario;
+    }
 
-    public void setAnulada(Boolean anulada) {
-        this.anulada = anulada;
+    public Integer getProducto() {
+        return producto;
     }
 }
