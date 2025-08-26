@@ -81,18 +81,18 @@ public class UsuarioControlador {
         return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
     }
 
-    /*--------------------------------------------------------------
-     * 4. Buscar usuario por email. /api/usuarios
-     *-------------------------------------------------------------*/
+    /*----------------------------------------------------------------------
+     * 4. Buscar usuario por email. /api/usuarios?email=ejemplo@gmail.com
+     *--------------------------------------------------------------------*/
     @GetMapping(params = "email")
     public ResponseEntity<?> buscarUsuarioPorEmail(@RequestParam String email) {
         Usuario usuario = usuarioServicio.buscarPorEmail(email);
         return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
     }
 
-    /*--------------------------------------------------------------
+    /*----------------------------------------------------------------------------------------------------
      * 5. Buscar usuarios cuya membresía está por vencer en los próximos 7 días. /api/usuarios/por-vencer
-     *-------------------------------------------------------------*/
+     *---------------------------------------------------------------------------------------------------*/
     @GetMapping("/por-vencer")
     public ResponseEntity<?> buscarUsuariosPorVencerEnUnaSemana() {
 
