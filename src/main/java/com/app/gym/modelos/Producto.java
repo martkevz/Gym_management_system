@@ -46,6 +46,9 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL) 
     private List<Venta> venta;
     
+    @Column(nullable = false)
+    private boolean anulada = false; // Marca si la asistencia está anulada (soft-delete)
+
     public Producto() {
     }
 
@@ -96,8 +99,16 @@ public class Producto {
 
     public void setVenta(List<Venta> venta) {
         this.venta = venta;
-    }   
+    }  
+    
+    public boolean getAnulada() {
+        return anulada;
+    }
 
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
+    }
+    
     /*  
      *  Métodos adicionales --------------------------------------------------------------------------------------------
      */
