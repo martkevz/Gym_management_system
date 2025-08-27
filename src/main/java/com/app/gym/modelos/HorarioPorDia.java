@@ -26,9 +26,7 @@ public class HorarioPorDia {
     @Column(name = "id_horario", nullable = false)
     private Integer idHorario;
 
-    /* En este atributo se almacenará cada día de la semana. Por ejemplo:
-     * "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo".
-     */
+    // Ej: "lunes", "martes", "miércoles"...
     private String dia;
 
     //Atributos para almacenar la hora de apertura y cierre del gimnasio.

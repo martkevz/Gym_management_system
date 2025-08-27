@@ -45,6 +45,7 @@ public class ProductoServicio {
     // ------------------------------------------------------------------
     // Operaciones de actualización
     // ------------------------------------------------------------------
+    @Transactional
     public Producto actualizarProducto(Integer id, ProductoActualizarDTO dto) {
         
         Producto producto = productoRepositorio.findById(id)
