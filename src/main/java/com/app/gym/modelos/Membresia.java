@@ -1,9 +1,18 @@
 package com.app.gym.modelos;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Period;
 import java.util.List;
 
+
+import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
+import org.hibernate.annotations.Type;
+
+import com.app.gym.convertidores.PeriodToPGIntervalConverter;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,13 +37,17 @@ public class Membresia {
     private String nombre;
 
     //Cuál es la duración de la membresía (Ej: 15 días, 1 mes, 3 meses, 1 año...).
-    @Column(length = 10)
-    private String duracion;
+    @Column(length = 10, columnDefinition = "interval")
+    @Type(PostgreSQLIntervalType.class) // Usa la anotación @Type de Hibernate
+    private Duration duracion;
 
     //Precio de la membresía.
     @Column(precision = 5, scale = 2) // Hasta 5 dígitos en total, con 2 decimales
     // Ejemplo: 999.99
     private BigDecimal precio;
+
+    @Column(nullable = false)
+    private boolean anulada = false; // Marca si la asistencia está anulada (soft-delete)
 
     //Esta relaciona uno a uno con Usuarios, donde cada usuario puede tener una membresía.
     @OneToMany(mappedBy = "membresia", fetch = FetchType.LAZY) // <<-- Many usuarios
@@ -60,11 +73,11 @@ public class Membresia {
         this.nombre = nombre;
     }
 
-    public String getDuracion() {
+    public Duration getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(String duracion) {
+    public void setDuracion(Duration duracion) {
         this.duracion = duracion;
     }
 
@@ -84,6 +97,13 @@ public class Membresia {
         this.usuarios = usuarios;
     }
 
+    public boolean getAnulada() {
+        return anulada;
+    }
+
+    public void setAnulada(boolean anulada) {
+        this.anulada = anulada;
+    }
     /*  
      *  Métodos adicionales --------------------------------------------------------------------------------------------
      */
@@ -95,6 +115,7 @@ public class Membresia {
                 ", nombre='" + nombre + '\'' +
                 ", duracion='" + duracion + '\'' +
                 ", precio=" + precio +
+                ", anulada=" + anulada +
                 '}';
     }
 }
