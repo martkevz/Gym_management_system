@@ -34,8 +34,8 @@ public class ProductoServicio {
 
         Producto producto = new Producto();
 
-        producto.setNombre(productoRequestDTO.getNombre().toLowerCase());
-        producto.setDescripcion(productoRequestDTO.getDescripcion());
+        producto.setNombre(productoRequestDTO.getNombre().trim().toLowerCase());
+        producto.setDescripcion(productoRequestDTO.getDescripcion().trim().toLowerCase());
         producto.setPrecio(productoRequestDTO.getPrecio());
         producto.setCantidadDisponible(productoRequestDTO.getCantidadDisponible());
         
@@ -52,11 +52,11 @@ public class ProductoServicio {
                                             .orElseThrow(() -> new RecursoNoEncontradoExcepcion("No se ha encontrado un producto con el ID: " + id));
 
         if(dto.getNombre() != null){
-            producto.setNombre(dto.getNombre().toLowerCase());
+            producto.setNombre(dto.getNombre().trim().toLowerCase());
         }
 
         if(dto.getDescripcion() != null){
-            producto.setDescripcion(dto.getDescripcion());
+            producto.setDescripcion(dto.getDescripcion().trim().toLowerCase());
         }
 
         if(dto.getPrecio() != null){

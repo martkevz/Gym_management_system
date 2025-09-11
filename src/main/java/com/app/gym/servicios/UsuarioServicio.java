@@ -59,10 +59,10 @@ public class UsuarioServicio {
         FechaValidador.validarFechaNacimiento(dto.getFechaNacimiento());
 
         Usuario usuario = new Usuario();
-        usuario.setNombre(dto.getNombre());
-        usuario.setApellido(dto.getApellido());
+        usuario.setNombre(dto.getNombre().trim().toLowerCase());
+        usuario.setApellido(dto.getApellido().trim().toLowerCase());
         usuario.setFechaNacimiento(dto.getFechaNacimiento());
-        usuario.setEmail(dto.getEmail());
+        usuario.setEmail(dto.getEmail().trim().toLowerCase());
         usuario.setFechaInicioMembresia(fecha);
         usuario.setMembresia(membresia);
 
