@@ -2,17 +2,12 @@ package com.app.gym.modelos;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.Period;
 import java.util.List;
-
 
 import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import org.hibernate.annotations.Type;
 
-import com.app.gym.convertidores.PeriodToPGIntervalConverter;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
