@@ -21,7 +21,6 @@ import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaActualiza
 import com.app.gym.dtos.asistenciaClaseAerobica.AsistenciaClaseAerobicaRequestDTO;
 import com.app.gym.modelos.AsistenciaClaseAerobica;
 import com.app.gym.servicios.AsistenciaClaseAerobicaServicio;
-import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -38,11 +37,7 @@ public class AsistenciaClaseAerobicaControlador {
     /*-------------------------------------------------------------------------------------
 	 * 1. Registrar asistencia clase aerobica (api/asistencia-clase-aerobica/registrar)
 	 *------------------------------------------------------------------------------------*/
-    /**
-     * @param dto DTO con los datos de la asistencia
-     * @param br BindingResult para manejar errores de validación
-     * @return ResponseEntity con el estado y el DTO de respuesta
-     */
+
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarAsistenciaClaseAerobica(@Valid @RequestBody AsistenciaClaseAerobicaRequestDTO dto, BindingResult br){ //@valid valida las notaciones (como @NotNull) del DTO
 	
@@ -59,14 +54,11 @@ public class AsistenciaClaseAerobicaControlador {
         
         return ResponseEntity.status(HttpStatus.CREATED).body(asistenciaClaseAerobicaServicio.toResponseDTO(asistencia));
     }	
+
     /*-------------------------------------------------------------------------------------
 	 * 2. Actualizar asistencia clase aerobica (api/asistencia-clase-aerobica/{id})
 	 *------------------------------------------------------------------------------------*/
-    /**
-     * @param id ID de la asistencia a actualizar
-     * @param dto DTO con los datos actualizados
-     * @return ResponseEntity con el estado y el DTO de respuesta
-     */
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> actualizarAsistenciaClaseAerobica(@PathVariable Integer id, @RequestBody AsistenciaClaseAerobicaActualizarDTO dto){
     
@@ -77,10 +69,7 @@ public class AsistenciaClaseAerobicaControlador {
     /*-------------------------------------------------------------------------------------
      * 3. Obtener asistencia clase aerobica por ID (api/asistencia-clase-aerobica/{id})
      *------------------------------------------------------------------------------------*/
-    /**
-     * @param id ID de la asistencia a buscar
-     * @return ResponseEntity con el estado y el DTO de respuesta o un mensaje de error si no se encuentra
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAsistenciaPorId(@PathVariable Integer id) {
         AsistenciaClaseAerobica asistencia = asistenciaClaseAerobicaServicio.obtenerAsistenciaPorId(id);
@@ -90,43 +79,23 @@ public class AsistenciaClaseAerobicaControlador {
     /*------------------------------------------------------------------------------------------------------------
      * 4. Buscar asistencias de clase aerobica por fecha, mes o rango de fechas (api/asistencia-clase-aerobica)
      *-----------------------------------------------------------------------------------------------------------*/
-    /**
-     * Busca asistencias de clase aeróbica por fecha.
-     *
-     * @param fecha Fecha de la asistencia a buscar
-     * @return ResponseEntity con el estado y la lista de asistencias o un mensaje de error si no se encuentran
-     */
+
+    // Busca asistencias de clase aeróbica por fecha.
     @GetMapping(params = "fecha")
     public ResponseEntity<?> buscarAsistenciasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-            // Buscar las ventas por fecha
-            List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorFecha(fecha);
-            return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO); 
+            return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistenciaClaseAerobicaServicio.obtenerAsistenciasPorFecha(fecha)));
     }
 
-    /**
-     * Busca asistencias de clase aeróbica por mes y año.
-     * @param anio Año del mes a buscar
-     * @param mes Mes a buscar (1-12)
-     * @return ResponseEntity con el estado y la lista de asistencias o un mensaje de error si no se encuentran
-     */
+    // Busca asistencias de clase aeróbica por mes y año.
     @GetMapping(params = {"anio", "mes"})
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
-        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorMes(anio, mes);
-        return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO);
+        return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistenciaClaseAerobicaServicio.obtenerAsistenciasPorMes(anio, mes)));
     }
 
-    /**
-     * Busca asistencias de clase aeróbica por un rango de fechas.
-     *
-     * @param inicio Fecha de inicio del rango
-     * @param fin Fecha de fin del rango
-     * @return ResponseEntity con el estado y la lista de asistencias o un mensaje de error si no se encuentran
-     */
+    // Busca asistencias de clase aeróbica por un rango de fechas.
     @GetMapping(params = {"inicio", "fin"})
     public ResponseEntity<?> buscarPorRangoFechas(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio, 
                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin){
-    
-        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaServicio.obtenerAsistenciasPorRangoFechas(inicio, fin);
-        return ListUtils.okMappedList(asistencias, asistenciaClaseAerobicaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de asistencias a DTOs
+        return ResponseEntity.ok(asistenciaClaseAerobicaServicio.toResponseDTO(asistenciaClaseAerobicaServicio.obtenerAsistenciasPorRangoFechas(inicio, fin))); 
     }
 }

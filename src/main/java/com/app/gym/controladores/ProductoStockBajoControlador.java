@@ -3,12 +3,8 @@ package com.app.gym.controladores;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.gym.modelos.ProductoStockBajo;
 import com.app.gym.servicios.ProductoStockBajoServicio;
-import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,21 +18,11 @@ public class ProductoStockBajoControlador {
         this.productoStockBajoServicio = productoStockBajoServicio;
     }
 
-    /**
-     * Obtiene una lista de productos cuyo stock es igual o menor a 10 unidades.
-     * 
-     * @return Lista de productos con stock bajo.
-     * Si la lista está vacía, retorna un 404 Not Found.
-     * Si hay productos con stock bajo, retorna un 200 OK con la lista.
-     */
+    /*--------------------------------------------------------------------------------------
+     * 1. Listar productos con stock bajo (10 unidades o menos). /api/productos-stock-bajo
+     *--------------------------------------------------------------------------------------*/
     @GetMapping
     public ResponseEntity<?> listarProductosStockBajo(){
-        List<ProductoStockBajo> productos = productoStockBajoServicio.obtenerProductosStockBajo();
-
-        if(productos.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", "No hay productos con stock bajo"));
-        } 
-        
-        return ResponseEntity.ok(productos);
+        return ResponseEntity.ok(productoStockBajoServicio.obtenerProductosStockBajo());
     }
 }

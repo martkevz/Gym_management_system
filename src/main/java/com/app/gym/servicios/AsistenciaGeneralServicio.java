@@ -24,7 +24,6 @@ import com.app.gym.validadores.FechaValidador;
 
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class AsistenciaGeneralServicio {
     
@@ -43,12 +42,7 @@ public class AsistenciaGeneralServicio {
     // Operaciones de creación
     // ------------------------------------------------------------------
     
-    /**
-     * Registra una nueva asistencia general.
-     *
-     * @param dto los datos de la asistencia a registrar
-     * @return la asistencia registrada
-     */
+    // Este método permite registrar la asistencia de un usuario a un horario en una fecha específica.
     @Transactional
     public AsistenciaGeneral registrarAsistenciaGeneral(AsistenciaRequestDTO dto){
 
@@ -85,8 +79,6 @@ public class AsistenciaGeneralServicio {
         Integer maxId = asistenciaGeneralRepositorio.findMaxIdAsistenciabyMonth(inicio, fin);
         int nuevoId = (maxId != null) ? maxId + 1 : 1;
 
-        // Crear una nueva asistencia general
-        // Asignar los valores a la nueva asistencia
         AsistenciaGeneral asistencia = new AsistenciaGeneral();
         asistencia.setIdAsistencia(nuevoId);
         asistencia.setFecha(fecha);
@@ -94,22 +86,14 @@ public class AsistenciaGeneralServicio {
         asistencia.setHorarioPorDia(horario);
         asistencia.setUsuario(usuario);
 
-        // Retornar la venta guardada
-        return asistenciaGeneralRepositorio.save(asistencia); // Guarda la asistencia y retorna la entidad guardada, que ahora tiene el ID asignado.
+        return asistenciaGeneralRepositorio.save(asistencia); 
     }
 
     // ------------------------------------------------------------------
     // Operaciones de actualización
     // ------------------------------------------------------------------
 
-    /**
-     * Actualiza una asistencia general.
-     *
-     * @param idAsistencia el ID de la asistencia a actualizar
-     * @param fecha la fecha de la asistencia a actualizar
-     * @param dto los datos de la asistencia a actualizar
-     * @return la asistencia actualizada
-     */
+    // Este método permite modificar completamente o parcialmente: la fecha, el estado de anulación, la hora de entrada, el horario asociado y el usuario de una asistencia general.
     @Transactional
 	public AsistenciaGeneral actualizarAsistenciaGeneral(Integer idAsistencia, LocalDate fecha, AsistenciaGeneralActualizarDTO dto){
 
@@ -150,25 +134,14 @@ public class AsistenciaGeneralServicio {
     // Operaciones de consulta
     // ------------------------------------------------------------------
 
-    /**
-     * Busca una asistencia por su ID y fecha.
-     *
-     * @param id el ID de la Asistencia
-     * @param fecha la fecha de la Asitencia
-     * @return un Optional que contiene la asistencia si se encuentra, o vacío si no
-     */
+    // Busca una asistencia por su ID y fecha.
     @Transactional(readOnly = true)
     public AsistenciaGeneral buscarPorIdFecha (Integer idAsistencia, LocalDate fecha){
         return asistenciaGeneralRepositorio.findByIdAsistenciaAndFecha(idAsistencia, fecha)
                                             .orElseThrow(() -> new RecursoNoEncontradoExcepcion("No se ha encontrado una asistencia con el id '" + idAsistencia + "' en la fecha: '" + fecha +"'."));
     }
 
-    /**
-     * Busca todas las asistencias realizadas en una fecha específica.
-     *
-     * @param fecha la fecha de la asistencia
-     * @return una lista de asistencias realizadas en esa fecha
-     */
+    // Busca todas las asistencias realizadas en una fecha específica.
     @Transactional(readOnly = true)
     public List<AsistenciaGeneral> buscarPorFecha(LocalDate fecha){
 
@@ -176,13 +149,7 @@ public class AsistenciaGeneralServicio {
         return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByFecha(fecha));
     }
 
-    /**
-     * Busca todas las asistencias realizadas en un mes específico.
-     *
-     * @param year el año del mes a buscar
-     * @param month el mes a buscar
-     * @return una lista de asistencias realizadas en ese mes
-     */
+    // Busca todas las asistencias que hay en un mes y año específicos.
     @Transactional(readOnly = true)
     public List<AsistenciaGeneral> buscarPorMes(int year, int month){
         FechaValidador.validarYearMonth(year, month); // Validar que el año y mes estén dentro del rango permitido
@@ -190,26 +157,16 @@ public class AsistenciaGeneralServicio {
         return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth()));
     }
 
-    /**
-     * Busca todas las asistencias que hay en un rango de fechas.
-     *
-     * @param inicio la fecha de inicio del rango
-     * @param fin la fecha de fin del rango
-     * @return una lista de asistencias realizadas en el rango de fechas
-     */
+    // Busca todas las asistencias que hay en un rango de fechas específico.
     @Transactional(readOnly = true)
     public List<AsistenciaGeneral> buscarPorRangoFechas(LocalDate inicio, LocalDate fin){
         FechaValidador.validarRangoFechas(inicio, fin); // Validar que el rango de fechas sea correcto
         return ListUtils.emptyIfNull(asistenciaGeneralRepositorio.findByRangoFechas(inicio, fin));
     }
 
-    // ------------------------------------------------------------------ 
+    // Convierte una entidad AsistenciaGeneral a un DTO de respuesta.
     public AsistenciaGeneralResponseDTO toResponseDTO (AsistenciaGeneral asistenciaGeneral){
 
-        /*
-         * Convierte una entidad AsistenciaGeneral a un DTO de respuesta.
-         * Este método crea un DTO que contiene los detalles de la asistencia, incluyendo el horario y el usuario asociados.
-         */
         HorarioPorDiaSimpleDTO h = new HorarioPorDiaSimpleDTO();
         h.setIdHorario(asistenciaGeneral.getHorarioPorDia().getIdHorario());
         h.setDia(asistenciaGeneral.getHorarioPorDia().getDia());
@@ -230,16 +187,7 @@ public class AsistenciaGeneralServicio {
         return r; // Retorna el DTO de respuesta con los datos de la asistencia general
     }
 
-    /**
-     * Convierte una lista de entidades AsistenciaGeneral a una lista de DTOs de respuesta.
-     *
-     * Este método utiliza la API de Streams de Java para transformar una lista de
-     * objetos del tipo AsistenciaGeneral en una lista de objetos AsistenciaGeneralResponseDTO. Esta transformación
-     * es útil para exponer solo los datos necesarios al cliente, manteniendo así la capa de persistencia desacoplada de la capa de presentación.
-     *
-     * @param asistencias la lista de entidades AsistenciaGeneral a convertir
-     * @return la lista de DTOs de respuesta correspondientes
-     */
+    // Convierte una lista de entidades AsistenciaGeneral a una lista de DTOs de respuesta.
     public List<AsistenciaGeneralResponseDTO> toResponseDTO(List<AsistenciaGeneral> asistencias){
 
         // Inicia un Stream a partir de la lista de objetos AsistenciaGeneral.

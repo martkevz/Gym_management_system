@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.gym.dtos.venta.VentaActualizarDto;
 import com.app.gym.dtos.venta.VentaCrearDto;
-import com.app.gym.modelos.Venta;
 import com.app.gym.servicios.VentaServicio;
-import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -38,11 +36,7 @@ public class VentaControlador {
     /*--------------------------------------------------------------
      * 1. Crear venta. /api/ventas/registrar
      *-------------------------------------------------------------*/
-    /**
-     * @param dto los datos de la venta a registrar
-     * @param br  el resultado de la validación
-     * @return la venta registrada o un error si hay problemas de validación
-     */
+    
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarVenta(@Valid @RequestBody VentaCrearDto dto, BindingResult br) { //@valid valida las notaciones (como @NotNull) del DTO
 
@@ -54,22 +48,13 @@ public class VentaControlador {
 
             return ResponseEntity.badRequest().body(Map.of("errores", errores));
         }
-
-        Venta ventas = ventaServicio.registrarVenta(dto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(ventaServicio.toResponseDTO(ventas)); // Si no hay errores, continua con la lógica normal
+        return ResponseEntity.status(HttpStatus.CREATED).body(ventaServicio.toResponseDTO(ventaServicio.registrarVenta(dto))); // Si no hay errores, continua con la lógica normal
     }
 
     /*------------------------------------------------------------------------------------------------------------
      * 2. Actualiza una venta (cantidad / anular). /api/ventas/{id}/{fecha}     formato de la fecha: YYYY-MM-DD
      *-----------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param id    el ID de la venta a actualizar
-     * @param fecha la fecha de la venta a actualizar
-     * @param dto   los nuevos datos de la venta
-     * @param br    el resultado de la validación
-     * @return la venta actualizada o un error si hay problemas de validación
-     */
+    
     @PatchMapping("/{id}/{fecha}")
     public ResponseEntity<?> actualizarVenta(@PathVariable Integer id,
                                             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -81,68 +66,43 @@ public class VentaControlador {
             return ResponseEntity.badRequest().body(Map.of("errores", errores));
 
         }
-        Venta actualizada = ventaServicio.actualizarVenta(id, fecha, dto);
-
-        return ResponseEntity.ok(ventaServicio.toResponseDTO(actualizada));
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventaServicio.actualizarVenta(id, fecha, dto)));
     }
 
     /*----------------------------------------------------------------------------
      * 3. Buscar venta por PK (ID y fecha).      /api/ventas/{id}/{fecha}   
      *----------------------------------------------------------------------------*/
-    /**
-     * @param id    el ID de la venta
-     * @param fecha la fecha de la venta
-     * @return la venta encontrada o un error si no se encuentra
-     */
+    
     @GetMapping("/{id}/{fecha}") 
 	public ResponseEntity<?> buscarVentaPorIdFecha(@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-			
-        Venta venta = ventaServicio.buscarPorIdFecha(id, fecha);
-        return ResponseEntity.ok(ventaServicio.toResponseDTO(venta)); 
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventaServicio.buscarPorIdFecha(id, fecha))); 
 	}
 
     /*--------------------------------------------------------------------------------------------------
      * 4. Busca todas las ventas realizadas en una fecha específica.   /api/ventas?fecha=2025-01-01 
      *------------------------------------------------------------------------------------------------*/
-    /**
-     * @param fecha la fecha de las ventas
-     * @return una lista de ventas realizadas en esa fecha o un error si no se encuentran
-     */
+    
     @GetMapping(params = "fecha") 
     public ResponseEntity<?> buscarVentasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-
-		List<Venta> ventas = ventaServicio.buscarPorFecha(fecha);
-		return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventaServicio.buscarPorFecha(fecha)));
     }
 
     /*-----------------------------------------------------------------------------------------------
      * 5. Busca todas las ventas realizadas en un mes específico.   /api/ventas?anio=2025&mes=01    
      *----------------------------------------------------------------------------------------------*/
-    /**  
-     * @param anio el año del mes a buscar 
-     * @param mes el mes a buscar
-     * @return una lista de ventas realizadas en ese mes o un error si no se encuentran
-     */
+    
     @GetMapping(params = {"anio", "mes"})
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
-
-        List<Venta> ventas = ventaServicio.buscarPorMes(anio, mes); 
-        return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO);
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventaServicio.buscarPorMes(anio, mes)));
     }
 
     /*----------------------------------------------------------------------------------------------------------------
      * 6. Busca todas las ventas realizadas en un rango de fechas.     /api/ventas?inicio=2025-01-01&fin=2025-01-31   
      *----------------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param inicio la fecha de inicio del rango
-     * @param fin la fecha de fin del rango
-     * @return una lista de ventas realizadas en el rango de fechas o un error si no se encuentran
-     */
+    
     @GetMapping(params = {"inicio", "fin"})
     public ResponseEntity<?> buscarPorRangoFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
 												@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin){
-
-        List<Venta> ventas = ventaServicio.buscarPorRangoFechas(inicio, fin);
-        return ListUtils.okMappedList(ventas, ventaServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
+        return ResponseEntity.ok(ventaServicio.toResponseDTO(ventaServicio.buscarPorRangoFechas(inicio, fin)));
     }
 }

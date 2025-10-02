@@ -191,7 +191,6 @@ public class VentaServicio {
      */
     @Transactional(readOnly = true)
     public List<Venta> buscarPorFecha (LocalDate fecha){
-
         FechaValidador.validarFecha(fecha); // Validar la fecha proporcionada
         return ListUtils.emptyIfNull(ventaRepositorio.findByFecha(fecha));
     }

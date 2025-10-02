@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.gym.dtos.producto.ProductoActualizarDTO;
 import com.app.gym.dtos.producto.ProductoRequestDTO;
-import com.app.gym.modelos.Producto;
 import com.app.gym.servicios.ProductoServicio;
-import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -45,9 +43,7 @@ public class ProductoControlador {
                 List<String> errores = br.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).toList();
                     return ResponseEntity.badRequest().body(Map.of("error", errores));
             }
-
-            Producto productoRegistrado = productoServicio.registrarProducto(dto);
-            return ResponseEntity.ok(productoRegistrado);
+            return ResponseEntity.ok(productoServicio.registrarProducto(dto));
         }
     }
 
@@ -62,8 +58,7 @@ public class ProductoControlador {
                 return ResponseEntity.badRequest().body(Map.of("error", errores));
         }
 
-        Producto productoActualizado = productoServicio.actualizarProducto(id, dto);
-        return ResponseEntity.ok(productoServicio.toResponseDTO(productoActualizado));
+        return ResponseEntity.ok(productoServicio.toResponseDTO(productoServicio.actualizarProducto(id, dto)));
     }
 
     /*--------------------------------------------------------------
@@ -71,8 +66,7 @@ public class ProductoControlador {
      *-------------------------------------------------------------*/
     @GetMapping
     public ResponseEntity<?> obtenerProductos() {
-        List<Producto> productos = productoServicio.obtenerProductos();
-        return ListUtils.okMappedList(productos, productoServicio::toResponseDTO);
+        return ResponseEntity.ok(productoServicio.toResponseDTO(productoServicio.obtenerProductos()));
     }
 
     /*--------------------------------------------------------------
@@ -80,8 +74,7 @@ public class ProductoControlador {
      *-------------------------------------------------------------*/
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerProductoPorId(@PathVariable Integer id) {
-        Producto producto = productoServicio.obtenerProductoPorId(id);
-        return ResponseEntity.ok(productoServicio.toResponseDTO(producto));
+        return ResponseEntity.ok(productoServicio.toResponseDTO(productoServicio.obtenerProductoPorId(id)));
     }
 
     /*--------------------------------------------------------------
@@ -89,7 +82,6 @@ public class ProductoControlador {
      *-------------------------------------------------------------*/
     @GetMapping(params = "nombre")
     public ResponseEntity<?> buscarProductoPorNombre(@RequestParam String nombre) {
-        List<Producto> productos= productoServicio.obtenerProductoPorNombre(nombre);
-        return ListUtils.okMappedList(productos, productoServicio::toResponseDTO);
+        return ResponseEntity.ok(productoServicio.toResponseDTO(productoServicio.obtenerProductoPorNombre(nombre)));
     }
 }

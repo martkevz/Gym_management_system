@@ -41,12 +41,8 @@ public class AsistenciaClaseAerobicaServicio {
     // ------------------------------------------------------------------
     // Operaciones de creación
     // ------------------------------------------------------------------
-    /**
-     * Registra la asistencia de un usuario a una clase aeróbica.
-     *
-     * @param dto DTO con los datos de la asistencia
-     * @return La asistencia registrada
-     */
+    
+    // Este método permite registrar la asistencia de un usuario a una clase aeróbica en una fecha específica.
     @Transactional
     public AsistenciaClaseAerobica registrarAsistenciaClaseAerobica(AsistenciaClaseAerobicaRequestDTO dto){
 
@@ -78,10 +74,8 @@ public class AsistenciaClaseAerobicaServicio {
     // ------------------------------------------------------------------
     // Operaciones de actualización
     // ------------------------------------------------------------------
-    /*  
-     * Actualiza una asistencia de clase aeróbica existente.
-     * Este método permite modificar completamente o parcialmente: la fecha, el estado de anulación, la clase asociada y el usuario de una asistencia de clase aeróbica.
-     */
+    
+    // Este método permite modificar completamente o parcialmente: la fecha, el estado de anulación, la clase asociada y el usuario de una asistencia de clase aeróbica.
     @Transactional
     public AsistenciaClaseAerobica actualizarAsistenciaClaseAerobica (Integer idAsistencia, AsistenciaClaseAerobicaActualizarDTO dto){
 
@@ -122,69 +116,39 @@ public class AsistenciaClaseAerobicaServicio {
     // ------------------------------------------------------------------
     // Operaciones de consulta
     // ------------------------------------------------------------------
-    /**
-     * Obtiene una asistencia de clase aeróbica por su ID.
-     *
-     * @param idAsistencia ID de la asistencia a buscar
-     * @return Un Optional que contiene la asistencia si se encuentra, o vacío si no
-     */
+
+    // Obtiene una asistencia de clase aeróbica por su ID.
     @Transactional(readOnly = true)
     public AsistenciaClaseAerobica obtenerAsistenciaPorId(Integer idAsistencia){
         return asistenciaClaseAerobicaRepositorio.findByidAsistenciaClaseAerobica(idAsistencia)
                                                     .orElseThrow(() -> new RecursoNoEncontradoExcepcion("Asistencia no encontrada con ID: " + idAsistencia));
     }
 
-    /**
-     * Obtiene todas las asistencias de clase aeróbica realizadas en una fecha específica.
-     *
-     * @param fecha Fecha de la asistencia
-     * @return Una lista de asistencias de clase aeróbica realizadas en esa fecha
-     */
+    // Obtiene todas las asistencias de clase aeróbica realizadas en una fecha específica.
     @Transactional(readOnly = true)
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorFecha(LocalDate fecha){
-
         FechaValidador.validarFecha(fecha); // Validar que la fecha no sea futura y esté dentro de un rango razonable
-        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByFecha(fecha);
-        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
+        return ListUtils.emptyIfNull(asistenciaClaseAerobicaRepositorio.findByFecha(fecha)); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
-    /**
-     * Obtiene todas las asistencias de clase aeróbica realizadas en un mes específico.
-     *
-     * @param anio Año del mes a buscar
-     * @param mes Mes a buscar (1-12)
-     * @return Una lista de asistencias de clase aeróbica realizadas en el mes y año especificados
-     */
+    // Obtiene todas las asistencias de clase aeróbica realizadas en un mes y año específicos.
     @Transactional(readOnly = true)
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorMes(int anio, int mes) {
 
         FechaValidador.validarYearMonth(anio, mes); // Validar que el año y mes sean válidos
         YearMonth ym = YearMonth.of(anio, mes);
-        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth());
-        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
+        return ListUtils.emptyIfNull(asistenciaClaseAerobicaRepositorio.findByRangoFechas(ym.atDay(1), ym.atEndOfMonth())); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
-    /**
-     * Obtiene todas las asistencias de clase aeróbica realizadas en un rango de fechas.
-     *
-     * @param inicio Fecha de inicio del rango
-     * @param fin Fecha de fin del rango
-     * @return Una lista de asistencias de clase aeróbica realizadas en el rango de fechas
-     */
+    // Obtiene todas las asistencias de clase aeróbica realizadas en un rango de fechas específico.
     @Transactional(readOnly = true)
     public List<AsistenciaClaseAerobica> obtenerAsistenciasPorRangoFechas(LocalDate inicio, LocalDate fin){
 
         FechaValidador.validarRangoFechas(inicio, fin); // Validar que el rango de fechas sea correcto
-        List<AsistenciaClaseAerobica> asistencias = asistenciaClaseAerobicaRepositorio.findByRangoFechas(inicio, fin);
-        return ListUtils.emptyIfNull(asistencias); // Si no se encuentran asistencias, devolver una lista vacía
+        return ListUtils.emptyIfNull(asistenciaClaseAerobicaRepositorio.findByRangoFechas(inicio, fin)); // Si no se encuentran asistencias, devolver una lista vacía
     }
 
-    /**
-     * Este método transforma una entidad AsistenciaClaseAerobica en un DTO AsistenciaClaseAerobicaResponseDTO
-     *
-     * @param asistenciaClaseAerobica la entidad AsistenciaClaseAerobica a convertir
-     * @return el DTO de respuesta correspondiente
-     */
+    // Convierte una entidad AsistenciaClaseAerobica a un DTO de respuesta.
     public AsistenciaClaseAerobicaResponseDTO toResponseDTO(AsistenciaClaseAerobica asistenciaClaseAerobica){
 
         HorarioPorDiaSimpleDTO h = new HorarioPorDiaSimpleDTO();
@@ -212,17 +176,8 @@ public class AsistenciaClaseAerobicaServicio {
         return a;
     } 
 
-    /**
-     * Convierte una lista de entidades AsistenciaClaseAerobica a una lista de DTOs de respuesta.
-     *
-     * Este método utiliza la API de Streams de Java para transformar una lista de
-     * objetos del tipo AsistenciaClaseAerobica en una lista de objetos AsistenciaClaseAerobicaResponseDTO.
-     *
-     * @param asistencias la lista de entidades AsistenciaClaseAerobica a convertir
-     * @return la lista de DTOs de respuesta correspondientes
-     */
+    // Convierte una lista de entidades AsistenciaClaseAerobica a una lista de DTOs de respuesta.
     public List<AsistenciaClaseAerobicaResponseDTO> toResponseDTO(List<AsistenciaClaseAerobica> asistencias) {
-        
         return asistencias.stream().map(this::toResponseDTO).toList();
     }
 }
