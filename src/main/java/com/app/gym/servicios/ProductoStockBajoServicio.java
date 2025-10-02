@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.app.gym.modelos.ProductoStockBajo;
 import com.app.gym.repositorios.ProductoStockBajoRepositorio;
+import com.app.gym.utils.ListUtils;
 
 @Service
 public class ProductoStockBajoServicio {
@@ -20,12 +21,8 @@ public class ProductoStockBajoServicio {
         this.repositorio = repositorio;
     }
 
-    /**
-     * Obtiene una lista de productos cuyo stock es igual o menor a 10 unidades.
-     * 
-     * @return Lista de productos con stock bajo.
-     */
+    // Obtener productos con stock bajo (10 unidades o menos)
     public List<ProductoStockBajo> obtenerProductosStockBajo() {
-        return repositorio.findAll();
+        return ListUtils.emptyIfNull(repositorio.findAll());
     }
 }

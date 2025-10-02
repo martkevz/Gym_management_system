@@ -62,6 +62,7 @@ public class MembresiaControlador {
     /*--------------------------------------------------------------
      * 3. Obtener membresia por ID.
      *-------------------------------------------------------------*/
+
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerMembresiaPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(membresiaServicio.toResponseDTO(membresiaServicio.obtenerMembresiaPorId(id)));
@@ -70,6 +71,7 @@ public class MembresiaControlador {
     /*--------------------------------------------------------------
      * 4. Obtener todas las membresias.
      *-------------------------------------------------------------*/
+    
     @GetMapping
     public ResponseEntity<?> obtenerMembresias() {;
         return ResponseEntity.ok(membresiaServicio.toResponseDTO(membresiaServicio.obtenerMembresias()));

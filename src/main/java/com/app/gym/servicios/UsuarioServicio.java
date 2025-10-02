@@ -132,10 +132,7 @@ public class UsuarioServicio {
         LocalDate inicio = LocalDate.now();
         LocalDate fin = inicio.plusDays(7);
         
-        List<Usuario> usuarios = usuarioRepositorio.findUsuariosPorVencer(inicio, fin);
-
-        // Si no se encuentran usuarios, devolver una lista vacía
-        return ListUtils.emptyIfNull(usuarios);
+        return ListUtils.emptyIfNull(usuarioRepositorio.findUsuariosPorVencer(inicio, fin));
     }
 
     /**

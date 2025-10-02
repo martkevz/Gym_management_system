@@ -79,8 +79,7 @@ public class ProductoServicio {
     // ------------------------------------------------------------------
     @Transactional(readOnly = true)  
     public List<Producto> obtenerProductos(){
-        List<Producto> productos = productoRepositorio.findAll();
-        return ListUtils.emptyIfNull(productos);
+        return ListUtils.emptyIfNull(productoRepositorio.findAll());
     }
 
     // Obtiene un producto por su ID.
@@ -92,8 +91,7 @@ public class ProductoServicio {
     // Busca productos por su nombre sin importar que esté en minúsculas o mayúsculas.
     @Transactional(readOnly = true)
     public List<Producto> obtenerProductoPorNombre(String nombre){
-        List<Producto> productos = productoRepositorio.findByNombreIgnoreCaseContaining(nombre);
-        return ListUtils.emptyIfNull(productos);
+        return ListUtils.emptyIfNull(productoRepositorio.findByNombreIgnoreCaseContaining(nombre));
     }
 
     // Métodos para convertir a DTOs

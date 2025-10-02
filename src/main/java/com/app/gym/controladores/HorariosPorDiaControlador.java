@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.gym.dtos.horarioPorDia.HorarioPorDiaActualizarDTO;
-import com.app.gym.modelos.HorarioPorDia;
 import com.app.gym.servicios.HorarioPorDiaServicio;
-import com.app.gym.utils.ListUtils;
 
 @RestController
 @RequestMapping("/api/horarios-por-dia")
@@ -29,8 +27,7 @@ public class HorariosPorDiaControlador {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> actualizarHorarioPorDia(@PathVariable Integer id, @RequestBody HorarioPorDiaActualizarDTO dto) {
-        HorarioPorDia horarioActualizado = horarioPorDiaServicio.actualizarHorarioPorDia(id, dto);
-        return ResponseEntity.ok(horarioPorDiaServicio.toResponseDTO(horarioActualizado));
+        return ResponseEntity.ok(horarioPorDiaServicio.toResponseDTO(horarioPorDiaServicio.actualizarHorarioPorDia(id, dto)));
     }
 
     /*----------------------------------------------------------------------------
@@ -39,8 +36,7 @@ public class HorariosPorDiaControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerHorarioPorId(@PathVariable Integer id) {
-        HorarioPorDia horario = horarioPorDiaServicio.obtenerHorarioPorId(id);
-        return ResponseEntity.ok(horarioPorDiaServicio.toResponseDTO(horario));
+        return ResponseEntity.ok(horarioPorDiaServicio.toResponseDTO(horarioPorDiaServicio.obtenerHorarioPorId(id)));
     }
 
     /*----------------------------------------------------------------------------
@@ -48,6 +44,6 @@ public class HorariosPorDiaControlador {
      *----------------------------------------------------------------------------*/
     @GetMapping
     public ResponseEntity<?> obtenerHorarios() {
-        return ListUtils.okMappedList(horarioPorDiaServicio.obtenerHorarios(), horarioPorDiaServicio::toResponseDTO);
+        return ResponseEntity.ok(horarioPorDiaServicio.toResponseDTO((horarioPorDiaServicio.obtenerHorarios())));
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.app.gym.repositorios.UsuarioPorMembresiaRepositorio;
+import com.app.gym.utils.ListUtils;
 import com.app.gym.modelos.UsuarioPorMembresia;
 
 /**
@@ -15,18 +16,14 @@ import com.app.gym.modelos.UsuarioPorMembresia;
 @Service
 public class UsuarioPorMembresiaServicio {
     
-    private final UsuarioPorMembresiaRepositorio repo;
+    private final UsuarioPorMembresiaRepositorio usuarioPorMembresiaRepositorio;
 
-    public UsuarioPorMembresiaServicio(UsuarioPorMembresiaRepositorio repo) {
-        this.repo = repo;
+    public UsuarioPorMembresiaServicio(UsuarioPorMembresiaRepositorio usuarioPorMembresiaRepositorio) {
+        this.usuarioPorMembresiaRepositorio = usuarioPorMembresiaRepositorio;
     }
 
-    /**
-     * Recupera todos los registros de la vista Usuarios_Por_Membresia.
-     *
-     * @return lista completa de UsuarioPorMembresia
-     */
+    // Obtener todos los usuarios por membresias
     public List<UsuarioPorMembresia> obtenerUsuariosPorMembresias() {
-        return repo.findAll();
+        return ListUtils.emptyIfNull(usuarioPorMembresiaRepositorio.findAll());
     }
 }

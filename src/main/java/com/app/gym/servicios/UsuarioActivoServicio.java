@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.gym.modelos.UsuarioActivo;
 import com.app.gym.repositorios.UsuarioActivoRepositorio;
+import com.app.gym.utils.ListUtils;
 
 /**
  * Servicio de negocio para operaciones sobre Usuarios Activos.
@@ -13,10 +14,10 @@ import com.app.gym.repositorios.UsuarioActivoRepositorio;
  */
 @Service
 public class UsuarioActivoServicio {
-    private final UsuarioActivoRepositorio repo;
+    private final UsuarioActivoRepositorio usuarioActivoRepositorio;
 
-    public UsuarioActivoServicio(UsuarioActivoRepositorio repo) {
-        this.repo = repo;
+    public UsuarioActivoServicio(UsuarioActivoRepositorio usuarioActivoRepositorio) {
+        this.usuarioActivoRepositorio = usuarioActivoRepositorio;
     }
 
     /**
@@ -25,8 +26,8 @@ public class UsuarioActivoServicio {
      * @return lista completa de UsuarioActivo
      */
     @Transactional(readOnly = true)
-    public List<UsuarioActivo> obtenerUsuarios() {
-        return repo.findAll();
+    public List<UsuarioActivo> obtenerUsuarios() {;
+        return ListUtils.emptyIfNull(usuarioActivoRepositorio.findAll());
     }
 
     /**
@@ -36,7 +37,7 @@ public class UsuarioActivoServicio {
      */
     @Transactional(readOnly = true)
     public List<UsuarioActivo> obtenerUsuariosActivos() {
-        return repo.findByMembresiaActivaTrue();
+        return ListUtils.emptyIfNull(usuarioActivoRepositorio.findByMembresiaActivaTrue());
     }
 
     /**
@@ -46,6 +47,6 @@ public class UsuarioActivoServicio {
      */
     @Transactional(readOnly = true)
     public List<UsuarioActivo> obtenerUsuariosVencidos() {
-        return repo.findByMembresiaActivaFalse();
+        return ListUtils.emptyIfNull(usuarioActivoRepositorio.findByMembresiaActivaFalse());
     }
 }

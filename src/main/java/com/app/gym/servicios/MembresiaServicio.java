@@ -67,6 +67,7 @@ public class MembresiaServicio {
         }
 
         if (dto.getCantidad() != null || dto.getUnidad() != null) {
+            
             if (dto.getCantidad() == null || dto.getUnidad() == null) {
                 throw new IllegalArgumentException("Para actualizar la duración, deben proporcionarse tanto la cantidad como la unidad.");
             }

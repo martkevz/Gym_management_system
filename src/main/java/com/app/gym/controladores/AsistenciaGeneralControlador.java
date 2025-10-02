@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.gym.dtos.asistenciaGeneral.AsistenciaGeneralActualizarDTO;
 import com.app.gym.dtos.asistenciaGeneral.AsistenciaRequestDTO;
-import com.app.gym.modelos.AsistenciaGeneral;
 import com.app.gym.servicios.AsistenciaGeneralServicio;
-import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 
@@ -38,11 +36,7 @@ public class AsistenciaGeneralControlador {
 	/*---------------------------------------------------------------------
 	 * 1. Registrar asistencia general (api/asistencia-general/registrar)
 	 *--------------------------------------------------------------------*/
-	/**
-	 * @param dto los datos de la asistencia a registrar
-	 * @param br  el resultado de la validación
-	 * @return la asistencia registrada o un error si hay problemas de validación
-	 */
+
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarAsistenciaGeneral (@Valid @RequestBody AsistenciaRequestDTO dto, BindingResult br){ //@valid valida las notaciones (como @NotNull) del DTO
 	
@@ -54,88 +48,54 @@ public class AsistenciaGeneralControlador {
             return ResponseEntity.badRequest().body(Map.of("errores", errores)); 
         }
 
-		AsistenciaGeneral asistencia = asistenciaGeneralServicio.registrarAsistenciaGeneral(dto);
-	
-		return ResponseEntity.status(HttpStatus.CREATED).body(asistenciaGeneralServicio.toResponseDTO(asistencia));
+		return ResponseEntity.status(HttpStatus.CREATED).body(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.registrarAsistenciaGeneral(dto)));
 	}
 
     /*-------------------------------------------------------------------------------------------------------------------------------------------------
      * 2. Actualizar asistencia general. (horaEntrada y anulada)    /api/asistencia-general/actualizar/1/2025-01-05   formato de la fecha: YYYY-MM-DD
      *-------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param idAsistencia el ID de la asistencia a actualizar
-     * @param fecha la fecha de la asistencia a actualizar
-     * @param dto los datos de la asistencia a actualizar
-     * @param br el resultado de la validación
-     * @return la asistencia actualizada o un error si hay problemas de validación
-     */
+
     @PatchMapping("/{id}/{fecha}")
     public ResponseEntity<?> actualizarAsistenciaGeneral(@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
                                                         @RequestBody AsistenciaGeneralActualizarDTO dto){
-        
-        AsistenciaGeneral asistencia = asistenciaGeneralServicio.actualizarAsistenciaGeneral(id, fecha, dto);
 
-        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencia));      
+        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.actualizarAsistenciaGeneral(id, fecha, dto)));      
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------
      * 3. Buscar asistencia por PK(ID y fecha). /api/asistencia-general/{id}/{fecha}   formato de la fecha: YYYY-MM-DD
      *---------------------------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param idAsistencia el ID de la asistencia a buscar
-     * @param fecha la fecha de la asistencia a buscar
-     * @return una respuesta HTTP con la asistencia encontrada o un mensaje de error si no se encuentra
-     */
+
     @GetMapping("/{id}/{fecha}")
     public ResponseEntity<?> buscarPorIdFecha (@PathVariable Integer id, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-
-    AsistenciaGeneral asistencia = asistenciaGeneralServicio.buscarPorIdFecha(id, fecha);
-	return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistencia));
+        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.buscarPorIdFecha(id, fecha)));
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------
      * 4. Busca todas las asistencias generales registradas en una fecha específica.    /api/asistencia-general?fecha=2025-01-01   
      *---------------------------------------------------------------------------------------------------------------------------*/
-    /**
-      * @param fecha la fecha para buscar las asistencias
-      * @return una lista de asistencias encontradas o un mensaje de error si no se encuentran    
-      */
+
     @GetMapping(params = "fecha")
     public ResponseEntity<?> buscarAsistenciasPorFecha(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
-        
-        List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorFecha(fecha);
-        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);	
+        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.buscarPorFecha(fecha)));
     }
 
     /**---------------------------------------------------------------------------------------------------------------------------
      * 5. Busca todas las asistencias generales registradas en un mes específico.   /api/asistencia-general?anio=2025&mes=01 
      *---------------------------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param anio el año para buscar las asistencias
-     * @param mes el mes para buscar las asistencias
-     * @return una lista de asistencias encontradas o un mensaje de error si no se encuentran
-     */
+    
     @GetMapping(params = {"anio", "mes"})
     public ResponseEntity<?> buscarPorMes(@RequestParam int anio, @RequestParam int mes){
-        
-        List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorMes(anio, mes);
-        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);
+        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.buscarPorMes(anio, mes)));
     }
 
     /**-------------------------------------------------------------------------------------------------------------------------------------------------
      * 6. Busca todas las asistencias generales registradas en un rango de fechas específico. /api/asistencia-general?inicio=2025-01-01&fin=2025-01-31 
      *-------------------------------------------------------------------------------------------------------------------------------------------------*/
-    /**
-     * @param inicio la fecha de inicio del rango
-     * @param fin la fecha de fin del rango
-     * @return una lista de asistencias encontradas o un mensaje de error si no se encuentran
-     */
+    
     @GetMapping(params = {"inicio", "fin"})
     public ResponseEntity<?> buscarPorRangoFechas (@RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate inicio, 
                                                     @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate fin){
-
-        List<AsistenciaGeneral> asistencias = asistenciaGeneralServicio.buscarPorRangoFechas(inicio, fin);
-        return ListUtils.okMappedList(asistencias,asistenciaGeneralServicio::toResponseDTO);
+        return ResponseEntity.ok(asistenciaGeneralServicio.toResponseDTO(asistenciaGeneralServicio.buscarPorRangoFechas(inicio, fin)));
     }
-
 }

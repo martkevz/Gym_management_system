@@ -17,12 +17,6 @@ public class AsistenciaId implements Serializable{
     public AsistenciaId() {
     }
 
-    /**
-     * Constructor con parámetros para inicializar los campos de la clase.
-     *
-     * @param idAsistencia Identificador único de la asistencia.
-     * @param fecha Fecha de la asistencia.
-     */
     public AsistenciaId(Integer idAsistencia, LocalDate fecha) {
         this.idAsistencia = idAsistencia;
         this.fecha = fecha;
@@ -45,12 +39,7 @@ public class AsistenciaId implements Serializable{
         this.fecha = fecha;
     }
     
-    /**
-     * Compara dos objetos VentaId para verificar si son iguales.
-     *
-     * @param o Objeto a comparar con la instancia actual.
-     * @return true si ambos objetos son iguales, false en caso contrario.
-     */
+    // Compara dos objetos VentaId para verificar si son iguales.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,14 +48,9 @@ public class AsistenciaId implements Serializable{
         return idAsistencia.equals(asistenciaId.idAsistencia) && fecha.equals(asistenciaId.fecha);
     }
 
-    /**
-     * Genera un código hash para la clave compuesta.
-     *
-     * @return Código hash basado en los campos idVenta y fecha.
-     */
+    // Genera un código hash basado en los atributos de la clase.
     @Override
     public int hashCode() {
         return Objects.hash(idAsistencia, fecha);
     }
-
 }

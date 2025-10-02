@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.gym.dtos.usuario.UsuarioActualizarDTO;
 import com.app.gym.dtos.usuario.UsuarioRequestDTO;
-import com.app.gym.modelos.Usuario;
 import com.app.gym.servicios.UsuarioServicio;
-import com.app.gym.utils.ListUtils;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +35,6 @@ public class UsuarioControlador {
      * 1. Registrar usuario. /api/usuarios/registrar
      *-------------------------------------------------------------*/
 
-    /**
-     * Registra un nuevo usuario en el sistema.
-     * @param dto los datos del usuario a registrar
-     * @param br  el resultado de la validación
-     * @return el usuario registrado o un error si hay problemas de validación
-     */
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto, BindingResult br) {
 
@@ -50,9 +42,7 @@ public class UsuarioControlador {
             List<String> errores = br.getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).toList();
                 return ResponseEntity.badRequest().body(Map.of("error", errores));
         }
-        
-        Usuario usuario = usuarioServicio.registrarUsuario(dto);
-        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
+        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarioServicio.registrarUsuario(dto)));
     }
 
     /*--------------------------------------------------------------
@@ -67,9 +57,7 @@ public class UsuarioControlador {
             
             return ResponseEntity.badRequest().body(Map.of("error", errores));
         } 
-        
-        Usuario usuario = usuarioServicio.actualizarUsuario(id, dto);
-        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
+        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarioServicio.actualizarUsuario(id, dto)));
     }
 
     /*--------------------------------------------------------------
@@ -77,8 +65,7 @@ public class UsuarioControlador {
      *-------------------------------------------------------------*/
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Integer id) {
-        Usuario usuario = usuarioServicio.buscarPorId(id);
-        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
+        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarioServicio.buscarPorId(id)));
     }
 
     /*----------------------------------------------------------------------
@@ -86,8 +73,7 @@ public class UsuarioControlador {
      *--------------------------------------------------------------------*/
     @GetMapping(params = "email")
     public ResponseEntity<?> buscarUsuarioPorEmail(@RequestParam String email) {
-        Usuario usuario = usuarioServicio.buscarPorEmail(email);
-        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuario));
+        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarioServicio.buscarPorEmail(email)));
     }
 
     /*----------------------------------------------------------------------------------------------------
@@ -95,8 +81,6 @@ public class UsuarioControlador {
      *---------------------------------------------------------------------------------------------------*/
     @GetMapping("/por-vencer")
     public ResponseEntity<?> buscarUsuariosPorVencerEnUnaSemana() {
-
-        List<Usuario> usuarios = usuarioServicio.usuariosPorVencerEnUnaSemana();
-        return ListUtils.okMappedList(usuarios, usuarioServicio::toResponseDTO); // Utiliza ListUtils para devolver una lista mapeada de ventas a DTOs
+        return ResponseEntity.ok(usuarioServicio.toResponseDTO(usuarioServicio.usuariosPorVencerEnUnaSemana()));
     }
 }
